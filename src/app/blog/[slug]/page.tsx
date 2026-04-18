@@ -3,10 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   Badge,
-  Card,
+  BlogList,
+  BlogPost,
   Container,
   FluidSection,
   ResponsiveImage,
+  type BlogListItem,
 } from "@fourplusweb/ui";
 import { siteConfig } from "../../../../site.config";
 import {
@@ -77,77 +79,74 @@ export default async function BlogPostPage({ params }: PageProps) {
     url: `${siteConfig.url}/blog/${post.slug}`,
   });
 
+  const meta = (
+    <div className="flex items-center gap-3 text-caption text-[color:var(--color-text-muted)]">
+      <span>{post.author}</span>
+      <span aria-hidden>·</span>
+      <time dateTime={post.date}>{formatDate(post.date)}</time>
+      <span aria-hidden>·</span>
+      <span>{post.readingTime}</span>
+    </div>
+  );
+
+  const cover = (
+    <ResponsiveImage
+      src={post.image}
+      alt={post.title}
+      sizes="full"
+      aspectRatio="16/9"
+      priority
+    />
+  );
+
+  const relatedItems: BlogListItem[] = related.map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.description,
+    image: p.image,
+    imageAlt: p.title,
+    publishDate: p.date,
+    readingTime: p.readingTime,
+  }));
+
   return (
     <>
       <JsonLdScript data={jsonLd} />
-      <FluidSection size="lg" background="surface">
-        <Container>
-          <article className="mx-auto max-w-prose">
-            <header className="mb-[var(--spacing-fluid-sm)]">
-              <div className="mb-4 flex flex-wrap gap-2">
+      <BlogPost
+        title={post.title}
+        lead={post.description}
+        meta={
+          <div className="flex flex-col gap-4">
+            {post.tags.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
                   <Badge key={tag} variant="muted">
                     {tag}
                   </Badge>
                 ))}
               </div>
-              <h1 className="font-display text-display">{post.title}</h1>
-              <p className="mt-4 text-lg text-[var(--color-text-muted)]">
-                {post.description}
-              </p>
-              <div className="mt-6 flex items-center gap-4 text-sm text-[var(--color-text-muted)]">
-                <span>{post.author}</span>
-                <span>·</span>
-                <time dateTime={post.date}>{formatDate(post.date)}</time>
-                <span>·</span>
-                <span>{post.readingTime}</span>
-              </div>
-            </header>
-
-            <div className="mb-[var(--spacing-fluid-md)]">
-              <ResponsiveImage
-                src={post.image}
-                alt={post.title}
-                sizes="full"
-                aspectRatio="16/9"
-                priority
-              />
-            </div>
-
-            <div className="prose prose-lg max-w-none">
-              <MDXContent />
-            </div>
-
-            <nav className="mt-[var(--spacing-fluid-md)] border-t border-[var(--color-border)] pt-8">
-              <Link
-                href="/blog"
-                className="text-[var(--color-primary)] hover:underline"
-              >
-                ← Обратно към блога
-              </Link>
-            </nav>
-          </article>
-        </Container>
-      </FluidSection>
+            ) : null}
+            {meta}
+          </div>
+        }
+        cover={cover}
+      >
+        <MDXContent />
+        <nav className="mt-8 border-t border-[color:var(--color-border)] pt-8">
+          <Link
+            href="/blog"
+            className="text-label text-[color:var(--color-primary)] hover:underline"
+          >
+            ← Обратно към блога
+          </Link>
+        </nav>
+      </BlogPost>
 
       {related.length > 0 && (
-        <FluidSection size="md" background="surface-alt">
+        <FluidSection role="detail" background="surface-alt">
           <Container>
-            <h2 className="mb-[var(--spacing-fluid-sm)] font-display text-2xl">
-              Свързани постове
-            </h2>
-            <div className="grid gap-6 md:grid-cols-3">
-              {related.map((p) => (
-                <Card
-                  key={p.slug}
-                  image={p.image}
-                  imageAlt={p.title}
-                  title={p.title}
-                  description={p.description}
-                  href={`/blog/${p.slug}`}
-                />
-              ))}
-            </div>
+            <h2 className="text-h2 mb-8">Свързани постове</h2>
+            <BlogList posts={relatedItems} />
           </Container>
         </FluidSection>
       )}

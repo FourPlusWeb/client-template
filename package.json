@@ -16,8 +16,8 @@
     "verify:auth": "bash scripts/verify-auth.sh"
   },
   "dependencies": {
-    "@fourplusweb/config": "^0.1.1",
-    "@fourplusweb/ui": "^0.1.1",
+    "@fourplusweb/config": "^0.2.0",
+    "@fourplusweb/ui": "^0.2.0",
     "@fourplusweb/utils": "^0.1.1",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
@@ -44,5 +44,12 @@
     "postcss": "^8.5.10",
     "tailwindcss": "^4.2.2",
     "typescript": "^6.0.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "@fourplusweb/config": "link:../studio-packages/packages/config",
+      "@fourplusweb/ui": "link:../studio-packages/packages/ui",
+      "@fourplusweb/utils": "link:../studio-packages/packages/utils"
+    }
   }
 }

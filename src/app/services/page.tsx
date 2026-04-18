@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
-import { Button, Container, FluidSection } from "@fourplusweb/ui";
 import {
-  CheckCircle2,
+  Container,
+  CTA,
+  Features,
+  FluidSection,
+  SectionHeading,
+  type FeatureItem,
+} from "@fourplusweb/ui";
+import {
   LayoutGrid,
   Palette,
   Rocket,
@@ -16,7 +22,7 @@ export const metadata: Metadata = {
     "Подредени service блокове, които могат да се комбинират и преименуват според конкретния клиент.",
 };
 
-const services = [
+const services: FeatureItem[] = [
   {
     icon: <Search aria-hidden="true" />,
     title: "Стратегия и структура",
@@ -65,77 +71,40 @@ const checklist = [
 export default function ServicesPage() {
   return (
     <>
-      <FluidSection size="lg">
+      <FluidSection role="hero">
         <Container>
-          <div className="mx-auto max-w-3xl">
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-[color:var(--color-primary)]">
-              Services as modules
-            </p>
-            <h1 className="mt-3 font-display text-4xl md:text-5xl">
-              Услугите са подредени като модули, не като твърд сценарий.
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-[color:var(--color-text-muted)]">
-              Това позволява лесно да добавите, махнете или преименувате блокове
-              според конкретния клиент, без да се чупи цялата структура на страницата.
-            </p>
+          <div className="max-w-[var(--container-md)]">
+            <SectionHeading
+              as="h1"
+              overline="Services as modules"
+              title="Услугите са подредени като модули, не като твърд сценарий."
+              description="Това позволява лесно да добавите, махнете или преименувате блокове според конкретния клиент, без да се чупи цялата структура на страницата."
+            />
           </div>
         </Container>
       </FluidSection>
 
-      <FluidSection size="lg" background="surface-alt">
-        <Container>
-          <ul className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {services.map((service) => (
-              <li
-                key={service.title}
-                className="rounded-[var(--radius-md)] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-6 shadow-[var(--shadow-sm)]"
-              >
-                <div
-                  className="flex size-12 items-center justify-center rounded-full text-[color:var(--color-primary)]"
-                  style={{
-                    backgroundColor:
-                      "color-mix(in srgb, var(--color-primary) 10%, transparent)",
-                  }}
-                >
-                  {service.icon}
-                </div>
-                <h2 className="mt-5 font-display text-2xl">{service.title}</h2>
-                <p className="mt-3 text-sm leading-6 text-[color:var(--color-text-muted)]">
-                  {service.description}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </FluidSection>
+      <Features items={services} eyebrow="Какво правим" />
 
-      <FluidSection size="lg">
+      <FluidSection role="pillar" background="surface-alt">
         <Container>
-          <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-            <div className="max-w-xl">
-              <p className="text-sm font-medium uppercase tracking-[0.2em] text-[color:var(--color-primary)]">
-                What is included
-              </p>
-              <h2 className="mt-3 font-display text-4xl md:text-5xl">
-                Блоковете са достатъчно ясни, за да се пренареждат бързо.
-              </h2>
-              <p className="mt-4 text-base leading-7 text-[color:var(--color-text-muted)]">
-                Така template-ът остава полезен, когато сайтът се развива от прост
-                стартов проект към по-голям, по-уникален и по-специфичен продукт.
-              </p>
-            </div>
+          <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+            <SectionHeading
+              overline="What is included"
+              title="Блоковете се пренареждат бързо."
+              description="Template-ът остава полезен, когато сайтът се развива от прост стартов проект към по-голям, по-уникален и по-специфичен продукт."
+            />
 
-            <ul className="grid gap-4 sm:grid-cols-2">
-              {checklist.map((item) => (
+            <ul className="flex flex-col gap-0">
+              {checklist.map((item, i) => (
                 <li
                   key={item}
-                  className="flex items-start gap-3 rounded-[var(--radius-md)] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-5 shadow-[var(--shadow-sm)]"
+                  className="flex gap-4 border-t border-[color:var(--color-border)] py-5"
                 >
-                  <CheckCircle2
-                    aria-hidden="true"
-                    className="mt-0.5 size-5 shrink-0 text-[color:var(--color-primary)]"
-                  />
-                  <p className="text-sm leading-6 text-[color:var(--color-text)]">{item}</p>
+                  <span className="text-caption font-mono text-[color:var(--color-text-muted)] shrink-0">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <p className="text-body">{item}</p>
                 </li>
               ))}
             </ul>
@@ -143,24 +112,11 @@ export default function ServicesPage() {
         </Container>
       </FluidSection>
 
-      <FluidSection size="lg" background="primary">
-        <Container>
-          <div className="mx-auto flex max-w-2xl flex-col items-center gap-6 text-center">
-            <h2 className="font-display text-4xl md:text-5xl text-white">
-              Искате нещо уникално, но не от нулата.
-            </h2>
-            <p className="text-base leading-7 text-white/80">
-              Точно за това служи този template: бърза адаптация, ясна основа и
-              достатъчно свобода за различни брандове.
-            </p>
-            <a href="/contact" className="inline-flex">
-              <Button variant="secondary" size="lg">
-                Свържете се с нас
-              </Button>
-            </a>
-          </div>
-        </Container>
-      </FluidSection>
+      <CTA
+        title="Искате нещо уникално, но не от нулата."
+        description="Точно за това служи този template: бърза адаптация, ясна основа и достатъчно свобода за различни брандове."
+        primary={{ label: "Свържете се с нас", href: "/contact" }}
+      />
     </>
   );
 }

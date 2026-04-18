@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Footer, Header, type FooterSocialItem } from "@fourplusweb/ui";
 import { themeToCSS } from "@fourplusweb/config";
 import { siteConfig } from "../../site.config";
+import { ScrollReveal } from "../components/ScrollReveal";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -55,6 +56,7 @@ export default function RootLayout({
           logo={<span className="font-display text-lg">{siteConfig.name}</span>}
           nav={siteConfig.nav}
         />
+        <ScrollReveal />
         <main className="relative">{children}</main>
         <Footer
           logo={<span className="font-display text-lg">{siteConfig.name}</span>}

@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Container, FluidSection } from "@fourplusweb/ui";
+import {
+  Container,
+  FluidSection,
+  Grid,
+  SectionHeading,
+} from "@fourplusweb/ui";
 
 export const metadata: Metadata = {
   title: "За нас",
@@ -9,16 +14,19 @@ export const metadata: Metadata = {
 
 const principles = [
   {
+    prefix: "01",
     title: "Системен дизайн",
     description:
       "Компонентите и секциите са подредени така, че да могат да се комбинират в различни типове сайтове без преработка.",
   },
   {
+    prefix: "02",
     title: "Token-first подход",
     description:
       "Сменяте визуалния характер през тема и конфигурация, вместо да коригирате отделни класове и hardcoded стойности.",
   },
   {
+    prefix: "03",
     title: "Прост растеж",
     description:
       "Когато се появи нова нужда, добавяте секция или page variant върху същата основа, а не нов стек.",
@@ -35,75 +43,67 @@ const capabilities = [
 export default function AboutPage() {
   return (
     <>
-      <FluidSection size="xl">
+      <FluidSection role="hero">
         <Container>
-          <div className="mx-auto max-w-3xl">
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-[color:var(--color-primary)]">
-              About the system
-            </p>
-            <h1 className="mt-3 font-display text-4xl md:text-5xl">
-              Шаблон, създаден да се адаптира, не да ви ограничава.
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-[color:var(--color-text-muted)]">
-              Основната идея е проста: имате завършена рамка, която изглежда добре,
-              работи добре и може да се превърне в различен сайт много по-бързо от
-              еднократно ръчно проектиран старт от нулата.
-            </p>
+          <div className="max-w-[var(--container-md)]">
+            <SectionHeading
+              as="h1"
+              overline="About the system"
+              title="Шаблон, създаден да се адаптира, не да ви ограничава."
+              description="Основната идея е проста: имате завършена рамка, която изглежда добре, работи добре и може да се превърне в различен сайт много по-бързо от еднократно ръчно проектиран старт от нулата."
+            />
           </div>
         </Container>
       </FluidSection>
 
-      <FluidSection size="lg" background="surface-alt">
+      <FluidSection role="pillar" background="surface-alt">
         <Container>
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="font-display text-4xl md:text-5xl">Какво получавате</h2>
-            <p className="mt-4 text-base leading-7 text-[color:var(--color-text-muted)]">
-              Това е foundation layer за нови проекти, а не завършен специфичен бранд.
-              Всяка част е направена да остане полезна и след следващата промяна на
-              темата.
-            </p>
-          </div>
+          <SectionHeading
+            overline="Какво получавате"
+            title="Foundation, не завършен бранд"
+            description="Това е foundation layer за нови проекти. Всяка част е направена да остане полезна и след следващата промяна на темата."
+          />
 
-          <ul className="mt-12 grid gap-6 md:grid-cols-3">
-            {principles.map((principle) => (
-              <li
-                key={principle.title}
-                className="rounded-[var(--radius-md)] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-6 shadow-[var(--shadow-sm)]"
-              >
-                <h3 className="font-display text-2xl">{principle.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-[color:var(--color-text-muted)]">
-                  {principle.description}
-                </p>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-12">
+            <Grid cols={3} gap="grid">
+              {principles.map((p) => (
+                <article
+                  key={p.title}
+                  className="flex flex-col gap-3 border-t border-[color:var(--color-border)] pt-6"
+                >
+                  <span className="text-caption font-mono text-[color:var(--color-text-muted)]">
+                    {p.prefix}
+                  </span>
+                  <h3 className="text-h2">{p.title}</h3>
+                  <p className="text-body text-[color:var(--color-text-muted)] max-w-[var(--card-body-max-width)]">
+                    {p.description}
+                  </p>
+                </article>
+              ))}
+            </Grid>
+          </div>
         </Container>
       </FluidSection>
 
-      <FluidSection size="lg">
+      <FluidSection role="pillar">
         <Container>
-          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            <div className="max-w-xl">
-              <p className="text-sm font-medium uppercase tracking-[0.2em] text-[color:var(--color-primary)]">
-                Capabilities
-              </p>
-              <h2 className="mt-3 font-display text-4xl md:text-5xl">
-                Подходящо за различни типове клиентски сайтове
-              </h2>
-              <p className="mt-4 text-base leading-7 text-[color:var(--color-text-muted)]">
-                Можете да го използвате за нова агенция, SaaS, услуга, личен бранд
-                или малък екипен сайт. Идеята е едно и също ядро да обслужва
-                различни съдържателни посоки.
-              </p>
-            </div>
+          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+            <SectionHeading
+              overline="Capabilities"
+              title="Подходящо за различни типове клиентски сайтове"
+              description="Можете да го използвате за нова агенция, SaaS, услуга, личен бранд или малък екипен сайт. Едно и също ядро обслужва различни съдържателни посоки."
+            />
 
             <ul className="grid gap-4 sm:grid-cols-2">
-              {capabilities.map((item) => (
+              {capabilities.map((item, i) => (
                 <li
                   key={item}
-                  className="rounded-[var(--radius-md)] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-5 shadow-[var(--shadow-sm)]"
+                  className="flex gap-4 border-t border-[color:var(--color-border)] pt-5"
                 >
-                  <p className="text-sm leading-6 text-[color:var(--color-text)]">{item}</p>
+                  <span className="text-caption font-mono text-[color:var(--color-text-muted)] shrink-0">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <p className="text-body">{item}</p>
                 </li>
               ))}
             </ul>

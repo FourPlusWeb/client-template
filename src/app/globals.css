@@ -1,18 +1,9 @@
-@import "@fourplusweb/config/theme.css";
 @import "tailwindcss";
+@import "@fourplusweb/config/theme.css";
 
-/* Template-level override: default --text-display (7rem cap) is too large for
-   standard column widths in hero sections. Reduce the cap to keep headings
-   elegant on real content. */
-@theme {
-  --text-display: clamp(2.5rem, 1.75rem + 3vw, 5rem);
-  --text-5xl: clamp(2.25rem, 1.75rem + 2.25vw, 4rem);
-  --text-4xl: clamp(2rem, 1.6rem + 1.75vw, 3rem);
-}
-
-/* Scan shared UI package for class names so Tailwind generates utilities used inside
-   @fourplusweb/ui components. Without this, layout classes used only in the package's
-   dist/ are purged. */
+/* Scan shared UI package for class names so Tailwind generates utilities used
+   inside @fourplusweb/ui components. Without this, layout classes used only
+   in the package's dist/ are purged. */
 @source "../../node_modules/@fourplusweb/ui/dist/**/*.{js,mjs,cjs}";
 @source "../../node_modules/.pnpm/@fourplusweb+ui*/node_modules/@fourplusweb/ui/dist/**/*.{js,mjs,cjs}";
 
@@ -24,21 +15,7 @@ body {
   min-height: 100dvh;
   font-family: var(--font-sans);
   color: var(--color-text);
-  background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--color-primary) 12%, transparent), transparent 32%),
-    radial-gradient(circle at top right, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent 28%),
-    linear-gradient(180deg, #ffffff 0%, color-mix(in srgb, var(--color-surface-alt) 55%, white) 100%);
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image: radial-gradient(color-mix(in srgb, var(--color-border) 45%, transparent) 1px, transparent 1px);
-  background-size: 20px 20px;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.22), transparent 50%);
-  opacity: 0.25;
+  background: var(--color-surface);
 }
 
 main {
@@ -54,4 +31,21 @@ main {
 :focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+}
+
+/* Scroll-reveal — CSS-only, gated on browsers that support
+   `animation-timeline: view()` so it's silent in unsupported browsers.
+   prefers-reduced-motion falls back to no animation via the media query. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    main > section {
+      animation: section-reveal linear;
+      animation-timeline: view();
+      animation-range: entry 0% cover 18%;
+    }
+    @keyframes section-reveal {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: none; }
+    }
+  }
 }
