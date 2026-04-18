@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Footer, Header, type FooterSocialItem } from "@fourplusweb/ui";
 import { themeToCSS } from "@fourplusweb/config";
 import { siteConfig } from "../../site.config";
 import "./globals.css";
@@ -38,6 +39,10 @@ export const metadata: Metadata = {
   },
 };
 
+const socialItems: FooterSocialItem[] = Object.entries(siteConfig.social ?? {}).map(
+  ([label, href]) => ({ label, href }),
+);
+
 export default function RootLayout({
   children,
 }: {
@@ -45,7 +50,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang={siteConfig.locale}>
-      <body style={themeToCSS(siteConfig)}>{children}</body>
+      <body style={themeToCSS(siteConfig)}>
+        <Header
+          logo={<span className="font-display text-lg">{siteConfig.name}</span>}
+          nav={siteConfig.nav}
+        />
+        <main>{children}</main>
+        <Footer
+          logo={<span className="font-display text-lg">{siteConfig.name}</span>}
+          nav={siteConfig.nav}
+          contact={siteConfig.contact}
+          social={socialItems}
+          copyright={`© ${new Date().getFullYear()} ${siteConfig.name}. Всички права запазени.`}
+        />
+      </body>
     </html>
   );
 }
