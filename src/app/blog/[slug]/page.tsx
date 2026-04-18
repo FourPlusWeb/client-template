@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
+  Badge,
+  Card,
   Container,
   FluidSection,
-  Card,
-  Badge,
   ResponsiveImage,
 } from "@fourplusweb/ui";
 import { siteConfig } from "../../../../site.config";
@@ -78,24 +78,24 @@ export default async function BlogPostPage({ params }: PageProps) {
   });
 
   return (
-    <main>
+    <>
       <JsonLdScript data={jsonLd} />
       <FluidSection size="lg" background="surface">
         <Container>
-          <article className="max-w-prose mx-auto">
+          <article className="mx-auto max-w-prose">
             <header className="mb-[var(--spacing-fluid-sm)]">
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="mb-4 flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
                   <Badge key={tag} variant="muted">
                     {tag}
                   </Badge>
                 ))}
               </div>
-              <h1 className="text-display font-display">{post.title}</h1>
-              <p className="text-lg text-[var(--color-text-muted)] mt-4">
+              <h1 className="font-display text-display">{post.title}</h1>
+              <p className="mt-4 text-lg text-[var(--color-text-muted)]">
                 {post.description}
               </p>
-              <div className="flex items-center gap-4 mt-6 text-sm text-[var(--color-text-muted)]">
+              <div className="mt-6 flex items-center gap-4 text-sm text-[var(--color-text-muted)]">
                 <span>{post.author}</span>
                 <span>·</span>
                 <time dateTime={post.date}>{formatDate(post.date)}</time>
@@ -118,7 +118,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               <MDXContent />
             </div>
 
-            <nav className="mt-[var(--spacing-fluid-md)] pt-8 border-t border-[var(--color-border)]">
+            <nav className="mt-[var(--spacing-fluid-md)] border-t border-[var(--color-border)] pt-8">
               <Link
                 href="/blog"
                 className="text-[var(--color-primary)] hover:underline"
@@ -133,7 +133,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       {related.length > 0 && (
         <FluidSection size="md" background="surface-alt">
           <Container>
-            <h2 className="text-2xl font-display mb-[var(--spacing-fluid-sm)]">
+            <h2 className="mb-[var(--spacing-fluid-sm)] font-display text-2xl">
               Свързани постове
             </h2>
             <div className="grid gap-6 md:grid-cols-3">
@@ -151,6 +151,6 @@ export default async function BlogPostPage({ params }: PageProps) {
           </Container>
         </FluidSection>
       )}
-    </main>
+    </>
   );
 }

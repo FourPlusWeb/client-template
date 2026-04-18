@@ -1,8 +1,9 @@
 import type { SiteConfig } from "@fourplusweb/config";
 
 export const siteConfig: SiteConfig = {
-  name: "Client Name",
-  description: "Short SEO description goes here.",
+  name: "Studio Name",
+  description:
+    "Production-ready websites and product pages with a polished, conversion-focused foundation.",
   url: "https://example.com",
   locale: "bg",
   colors: {

@@ -2,8 +2,8 @@
 @import "tailwindcss";
 
 /* Template-level override: default --text-display (7rem cap) is too large for
-   standard column widths in Hero and similar sections. Reduce cap to 5rem.
-   Remove this override when @fourplusweb/config@0.2.0 normalizes display scale. */
+   standard column widths in hero sections. Reduce the cap to keep headings
+   elegant on real content. */
 @theme {
   --text-display: clamp(2.5rem, 1.75rem + 3vw, 5rem);
   --text-5xl: clamp(2.25rem, 1.75rem + 2.25vw, 4rem);
@@ -11,19 +11,47 @@
 }
 
 /* Scan shared UI package for class names so Tailwind generates utilities used inside
-   @fourplusweb/ui components (flex, gap, @container queries, etc.). Without this,
-   layout classes used only in the package's dist/ are purged. */
+   @fourplusweb/ui components. Without this, layout classes used only in the package's
+   dist/ are purged. */
 @source "../../node_modules/@fourplusweb/ui/dist/**/*.{js,mjs,cjs}";
 @source "../../node_modules/.pnpm/@fourplusweb+ui*/node_modules/@fourplusweb/ui/dist/**/*.{js,mjs,cjs}";
-
-/* Tailwind v4 auto-enables @container; kept this note so future editors see the intent. */
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
+  min-height: 100dvh;
   font-family: var(--font-sans);
   color: var(--color-text);
-  background: var(--color-surface);
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--color-primary) 12%, transparent), transparent 32%),
+    radial-gradient(circle at top right, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, color-mix(in srgb, var(--color-surface-alt) 55%, white) 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(color-mix(in srgb, var(--color-border) 45%, transparent) 1px, transparent 1px);
+  background-size: 20px 20px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.22), transparent 50%);
+  opacity: 0.25;
+}
+
+main {
+  position: relative;
+  z-index: 0;
+}
+
+::selection {
+  color: white;
+  background: var(--color-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }

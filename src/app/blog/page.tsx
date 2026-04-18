@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Container, FluidSection, Card } from "@fourplusweb/ui";
+import { Card, Container, FluidSection } from "@fourplusweb/ui";
 import { siteConfig } from "../../../site.config";
 import { getAllPosts } from "../../lib/blog";
 
@@ -18,30 +18,32 @@ export default function BlogIndexPage() {
   const posts = getAllPosts();
 
   return (
-    <main>
-      <FluidSection size="lg" background="surface">
-        <Container>
-          <header className="mb-[var(--spacing-fluid-md)] max-w-prose">
-            <h1 className="text-display font-display">Блог</h1>
-            <p className="text-lg text-[var(--color-text-muted)] mt-4">
-              Новини, идеи и статии от екипа.
-            </p>
-          </header>
+    <FluidSection size="lg" background="surface">
+      <Container>
+        <header className="mb-[var(--spacing-fluid-md)] max-w-prose">
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-[color:var(--color-primary)]">
+            Knowledge base
+          </p>
+          <h1 className="mt-3 font-display text-display">Блог</h1>
+          <p className="mt-4 text-lg text-[var(--color-text-muted)]">
+            Новини, идеи и статии, които лесно се адаптират към различен бранд и
+            тон на комуникация.
+          </p>
+        </header>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post) => (
-              <Card
-                key={post.slug}
-                image={post.image}
-                imageAlt={post.title}
-                title={post.title}
-                description={post.description}
-                href={`/blog/${post.slug}`}
-              />
-            ))}
-          </div>
-        </Container>
-      </FluidSection>
-    </main>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post) => (
+            <Card
+              key={post.slug}
+              image={post.image}
+              imageAlt={post.title}
+              title={post.title}
+              description={post.description}
+              href={`/blog/${post.slug}`}
+            />
+          ))}
+        </div>
+      </Container>
+    </FluidSection>
   );
 }

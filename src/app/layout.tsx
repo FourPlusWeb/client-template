@@ -50,12 +50,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang={siteConfig.locale}>
-      <body style={themeToCSS(siteConfig)}>
+      <body className="antialiased" style={themeToCSS(siteConfig)}>
         <Header
           logo={<span className="font-display text-lg">{siteConfig.name}</span>}
           nav={siteConfig.nav}
         />
-        <main>{children}</main>
+        <main className="relative">{children}</main>
         <Footer
           logo={<span className="font-display text-lg">{siteConfig.name}</span>}
           nav={siteConfig.nav}
