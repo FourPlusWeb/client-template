@@ -16,7 +16,7 @@ export default function ContactPage() {
     <FluidSection size="xl">
       <Container>
         <div className="mx-auto max-w-3xl">
-          <h1 className="text-display font-display">Свържете се с нас</h1>
+          <h1 className="text-4xl md:text-5xl font-display">Свържете се с нас</h1>
           <p className="mt-6 text-lg text-[color:var(--color-text-muted)]">
             {"{Едно изречение за best way да ви намерят. Замени за клиент.}"}
           </p>

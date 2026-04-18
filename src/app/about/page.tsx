@@ -38,7 +38,7 @@ export default function AboutPage() {
       <FluidSection size="xl">
         <Container>
           <div className="mx-auto max-w-3xl">
-            <h1 className="text-display font-display">За {"{Company name}"}</h1>
+            <h1 className="text-4xl md:text-5xl font-display">За {"{Company name}"}</h1>
             <p className="mt-6 text-lg text-[color:var(--color-text-muted)]">
               {"{Параграф 1: Кой сте, с какво се занимавате, защо съществувате. Замени за клиент.}"}
             </p>
@@ -55,7 +55,7 @@ export default function AboutPage() {
       <FluidSection size="lg" background="surface-alt">
         <Container>
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-display font-display">Екипът</h2>
+            <h2 className="text-4xl md:text-5xl font-display">Екипът</h2>
             <p className="mt-4 text-base text-[color:var(--color-text-muted)]">
               {"{Едно изречение за екипа като цяло.}"}
             </p>
@@ -84,7 +84,7 @@ export default function AboutPage() {
       <FluidSection size="lg">
         <Container>
           <div className="mx-auto max-w-3xl">
-            <h2 className="text-display font-display">Мисия и ценности</h2>
+            <h2 className="text-4xl md:text-5xl font-display">Мисия и ценности</h2>
             <p className="mt-4 text-lg text-[color:var(--color-text-muted)]">
               {"{Едно изречение за мисията ви — какво правите за клиентите и защо.}"}
             </p>

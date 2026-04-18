@@ -54,7 +54,7 @@ export default function ServicesPage() {
       <FluidSection size="lg">
         <Container>
           <div className="mx-auto max-w-3xl">
-            <h1 className="text-display font-display">Услуги</h1>
+            <h1 className="text-4xl md:text-5xl font-display">Услуги</h1>
             <p className="mt-6 text-lg text-[color:var(--color-text-muted)]">
               {"{Едно изречение за обхвата на услугите и за кого са подходящи. Замени за клиент.}"}
             </p>
@@ -67,7 +67,7 @@ export default function ServicesPage() {
       <FluidSection size="lg" background="primary">
         <Container>
           <div className="mx-auto flex max-w-2xl flex-col items-center gap-6 text-center">
-            <h2 className="text-display font-display text-white">
+            <h2 className="text-4xl md:text-5xl font-display text-white">
               {"{Не сте сигурни коя услуга ви трябва?}"}
             </h2>
             <p className="text-base text-white/80">

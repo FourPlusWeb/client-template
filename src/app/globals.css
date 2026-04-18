@@ -1,6 +1,21 @@
 @import "@fourplusweb/config/theme.css";
 @import "tailwindcss";
 
+/* Template-level override: default --text-display (7rem cap) is too large for
+   standard column widths in Hero and similar sections. Reduce cap to 5rem.
+   Remove this override when @fourplusweb/config@0.2.0 normalizes display scale. */
+@theme {
+  --text-display: clamp(2.5rem, 1.75rem + 3vw, 5rem);
+  --text-5xl: clamp(2.25rem, 1.75rem + 2.25vw, 4rem);
+  --text-4xl: clamp(2rem, 1.6rem + 1.75vw, 3rem);
+}
+
+/* Scan shared UI package for class names so Tailwind generates utilities used inside
+   @fourplusweb/ui components (flex, gap, @container queries, etc.). Without this,
+   layout classes used only in the package's dist/ are purged. */
+@source "../../node_modules/@fourplusweb/ui/dist/**/*.{js,mjs,cjs}";
+@source "../../node_modules/.pnpm/@fourplusweb+ui*/node_modules/@fourplusweb/ui/dist/**/*.{js,mjs,cjs}";
+
 /* Tailwind v4 auto-enables @container; kept this note so future editors see the intent. */
 
 html {
