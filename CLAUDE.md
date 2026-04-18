@@ -8,6 +8,7 @@
 2. Замени логото и favicon в `public/`.
 3. Обнови заглавието и описанието в този файл (`CLAUDE.md`) и в `BRIEF.md`.
 4. Попълни `BRIEF.md` с клиента на kickoff call (30–45 мин). Без попълнен brief Claude Code не започва page работа — виж "Brief gate" по-долу.
+5. Изтрий или замени placeholder блог постовете в `content/blog/*.mdx` и SVG placeholder-ите в `public/blog/` — това е seed съдържание, не клиентско.
 
 ## Контекст
 
