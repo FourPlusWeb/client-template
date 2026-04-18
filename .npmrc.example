@@ -1,0 +1,5 @@
+# Copy this file to .npmrc locally.
+# Set NODE_AUTH_TOKEN env var with a GitHub PAT (read:packages scope).
+@fourplusweb:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+always-auth=true

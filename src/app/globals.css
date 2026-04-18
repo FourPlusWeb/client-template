@@ -1,0 +1,14 @@
+@import "@fourplusweb/config/theme.css";
+@import "tailwindcss";
+
+/* Tailwind v4 auto-enables @container; kept this note so future editors see the intent. */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-surface);
+}
