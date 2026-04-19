@@ -1,6 +1,6 @@
 # CLAUDE.md — Client Template
 
-Generic Next.js 15 starter за корпоративни сайтове. Клиентско репо се създава чрез GitHub "Use this template".
+Generic Next.js 16 starter за корпоративни сайтове. Клиентско репо се създава чрез GitHub "Use this template".
 
 ## Къде е какво
 
