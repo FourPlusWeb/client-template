@@ -14,8 +14,8 @@ export const siteConfig: SiteConfig = {
     surface: "#FFFFFF",
     surfaceAlt: "#F8FAFC",
     text: "#0F172A",
-    textMuted: "#64748B",
-    border: "#E2E8F0",
+    textMuted: "#52606F",
+    border: "#CBD5E1",
   },
   fonts: {
     sans: "Inter Variable",

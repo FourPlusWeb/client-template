@@ -28,9 +28,17 @@ main {
   background: var(--color-primary);
 }
 
+/* Baseline focus-visible for any element that doesn't define its own. UI
+   components override with the halo `box-shadow: var(--ring-focus)` pattern. */
 :focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+}
+
+a:focus-visible {
+  outline: none;
+  box-shadow: var(--ring-focus);
+  border-radius: var(--radius-sm);
 }
 
 /* Scroll-reveal — CSS-only, gated on browsers that support

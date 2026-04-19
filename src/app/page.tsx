@@ -108,7 +108,10 @@ export default function Home() {
                   key={p.title}
                   className="flex flex-col gap-3 border-t border-[color:var(--color-border)] pt-6"
                 >
-                  <span className="text-caption font-mono text-[color:var(--color-text-muted)]">
+                  <span
+                    aria-hidden="true"
+                    className="text-caption font-mono text-[color:var(--color-text-muted)]"
+                  >
                     {String(p.prefix).padStart(2, "0")}
                   </span>
                   <h3 className="text-h2">{p.title}</h3>
@@ -137,7 +140,10 @@ export default function Home() {
                   key={step.title}
                   className="flex flex-col gap-3 border-t border-[color:var(--color-border)] pt-6"
                 >
-                  <span className="text-caption font-mono text-[color:var(--color-text-muted)]">
+                  <span
+                    aria-hidden="true"
+                    className="text-caption font-mono text-[color:var(--color-text-muted)]"
+                  >
                     {step.prefix}
                   </span>
                   <h3 className="text-h3">{step.title}</h3>

@@ -50,8 +50,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang={siteConfig.locale}>
-      <body className="antialiased" style={themeToCSS(siteConfig)}>
+    <html lang={siteConfig.locale} style={themeToCSS(siteConfig)}>
+      <body className="antialiased">
         <Header
           logo={<span className="font-display text-lg">{siteConfig.name}</span>}
           nav={siteConfig.nav}
