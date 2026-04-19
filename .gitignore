@@ -10,5 +10,6 @@ dist
 /test-results/
 /playwright-report/
 
-# Claude Code worktrees
+# Claude Code — not tracked in template. Fork consumers run their own
+# sessions with their own settings.
 .claude/

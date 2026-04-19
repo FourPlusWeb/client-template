@@ -13,7 +13,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "verify:auth": "bash scripts/verify-auth.sh"
+    "verify:auth": "bash scripts/verify-auth.sh",
+    "playbook:sync": "bash scripts/sync-playbook.sh"
   },
   "dependencies": {
     "@fourplusweb/config": "0.2.2",

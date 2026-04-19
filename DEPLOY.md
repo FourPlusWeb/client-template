@@ -14,7 +14,11 @@ Next.js, без промяна на source code. По-долу са 4 теств
 
 ---
 
-## 1) Netlify (препоръчано за повечето клиенти)
+## 1) Netlify (committed default — recommended)
+
+**`netlify.toml` is committed at the repo root.** Netlify auto-detects it
+on first deploy; build command, publish directory, and plugin are already
+configured. You only need to connect the repo and set `NODE_AUTH_TOKEN`.
 
 **Защо:** Zero config. Официален Next.js runtime plugin — auto-detected. Free
 tier: 100 GB bandwidth/месец, unlimited builds, custom domain + SSL. Работи с
@@ -23,16 +27,19 @@ org repos (private или public) без ограничения.
 **Steps:**
 
 1. https://app.netlify.com/start → Import from GitHub → избери repo-то.
-2. Build settings (обикновено auto-detected):
-   - Build command: `pnpm build`
-   - Publish directory: `.next`
-3. **Environment variables:** `NODE_AUTH_TOKEN` = classic PAT.
+2. Build settings се четат от `netlify.toml` (не пипай override-ите).
+3. **Environment variables:** `NODE_AUTH_TOKEN` = classic PAT (Site Settings
+   → Environment variables → Deploy contexts: All).
 4. Deploy → получаваш `*.netlify.app` URL след 2-4 минути.
 
 **Custom domain:** Settings → Domain management → Add domain → следваш
 DNS инструкциите.
 
 ---
+
+> **Opt-in recipes below.** The committed `netlify.toml` covers the default
+> case. The following are reference recipes — not kept sync'd to the template
+> baseline. Expect to adapt.
 
 ## 2) Vercel (native home на Next.js)
 
@@ -150,6 +157,7 @@ SSL termination.
 - Потвърди че token-ът е **classic PAT** (започва с `ghp_`), НЕ fine-grained
 - Потвърди scope `read:packages`
 - Потвърди че GitHub акаунтът, генерирал token-а, е **member на `FourPlusWeb` org**
+- Token setup / provisioning / rotation problems → see studio's `ACCESS.md` (workspace repo).
 
 ### Build fail с "Cannot find module"
 
