@@ -4,24 +4,19 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@fourplusweb/config': link:../studio-packages/packages/config
-  '@fourplusweb/ui': link:../studio-packages/packages/ui
-  '@fourplusweb/utils': link:../studio-packages/packages/utils
-
 importers:
 
   .:
     dependencies:
       '@fourplusweb/config':
-        specifier: link:../studio-packages/packages/config
-        version: link:../studio-packages/packages/config
+        specifier: ^0.2.0
+        version: 0.2.0
       '@fourplusweb/ui':
-        specifier: link:../studio-packages/packages/ui
-        version: link:../studio-packages/packages/ui
+        specifier: ^0.2.0
+        version: 0.2.0(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react@19.2.5)
       '@fourplusweb/utils':
-        specifier: link:../studio-packages/packages/utils
-        version: link:../studio-packages/packages/utils
+        specifier: ^0.1.1
+        version: 0.1.1
       '@mdx-js/loader':
         specifier: ^3.1.1
         version: 3.1.1
@@ -136,8 +131,25 @@ packages:
     resolution: {integrity: sha512-rZAP3aVgB9ds9KOeUSL+zZ21hPmo8dh6fnIFwRQj5EAZl9gzR7wxYbYXYysAM8CTqGmUGyp2S4kUdV17MnGuWQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
+  '@fourplusweb/config@0.2.0':
+    resolution: {integrity: sha512-krbmfp+ZrCWbBxFfvEdC7VTDNadNgh4d0Vr5Sjl1Ich6uNmEbfx7/qn1c8C6V7F4zkeDvTdKlFzLp361xjrm5w==, tarball: https://npm.pkg.github.com/download/@fourplusweb/config/0.2.0/5c703682ad9012a9862010833f4a9d7d675a86ca}
+
   '@fourplusweb/eslint-config@0.1.1':
     resolution: {integrity: sha512-kkCZU7ghxbVYtu0B/xTw1d4WDp7jhjC9Psz1B4cH0VZozo+9aEJ3v6+IUItY5q2/mAdZvzSOigiSIjG5du9Ngg==, tarball: https://npm.pkg.github.com/download/@fourplusweb/eslint-config/0.1.1/92614250003590d7f1ce1c94b7262cd82b48f164}
+
+  '@fourplusweb/ui@0.2.0':
+    resolution: {integrity: sha512-virlXM45Q6PdgA+J+3l1MUwTFcSmzrKktGVN64Zqs1ZJcq6T4HYIRLz2sqOGGDuK40FsBUN/4ETc6vnrRwfu2Q==, tarball: https://npm.pkg.github.com/download/@fourplusweb/ui/0.2.0/a69bd214344999645f76a599c6012d5eee1e9039}
+    peerDependencies:
+      next: ^14 || ^15
+      react: ^18 || ^19
+
+  '@fourplusweb/utils@0.1.1':
+    resolution: {integrity: sha512-z2faQhTleM8/B9cLUbqbSU0k/kq4Gu6dwRZqneSXkpB/UFeIHXNL+8EMvRtvtLiihM3gnvccU96hFern8Pse+A==, tarball: https://npm.pkg.github.com/download/@fourplusweb/utils/0.1.1/da580a0a861b31efaf063869f5cd98b26c69bbb4}
+
+  '@hookform/resolvers@5.2.2':
+    resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
+    peerDependencies:
+      react-hook-form: ^7.55.0
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -410,6 +422,9 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
+
+  '@standard-schema/utils@0.3.0':
+    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
@@ -729,6 +744,10 @@ packages:
 
   client-only@0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
+
+  clsx@2.1.1:
+    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
+    engines: {node: '>=6'}
 
   collapse-white-space@2.1.0:
     resolution: {integrity: sha512-loKTxY1zCOuG4j9f6EPnuyyYkf58RnhhWTvRoZEokgB+WbdXehfjFviyOVYkqzEWz1Q5kRiZdBYS5SwxbQYwzw==}
@@ -1631,6 +1650,12 @@ packages:
     peerDependencies:
       react: ^19.2.5
 
+  react-hook-form@7.72.1:
+    resolution: {integrity: sha512-RhwBoy2ygeVZje+C+bwJ8g0NjTdBmDlJvAUHTxRjTmSUKPYsKfMphkS2sgEMotsY03bP358yEYlnUeZy//D9Ig==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+
   react@19.2.5:
     resolution: {integrity: sha512-llUJLzz1zTUBrskt2pwZgLq59AemifIftw4aB7JxOqf1HY2FDaGDxgwpAPVzHU1kdWabH7FauP4i1oEeer2WCA==}
     engines: {node: '>=0.10.0'}
@@ -1808,6 +1833,9 @@ packages:
       babel-plugin-macros:
         optional: true
 
+  tailwind-merge@3.5.0:
+    resolution: {integrity: sha512-I8K9wewnVDkL1NTGoqWmVEIlUcB9gFriAEkXkfCjX5ib8ezGxtR3xD7iZIxrfArjEsH7F1CHD4RFUtxefdqV/A==}
+
   tailwindcss@4.2.2:
     resolution: {integrity: sha512-KWBIxs1Xb6NoLdMVqhbhgwZf2PGBpPEiwOqgI4pFIYbNTfBXiKYyWoTsXgBQ9WFg/OlhnvHaY+AEpW7wSmFo2Q==}
 
@@ -1932,6 +1960,9 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
+  zod@4.3.6:
+    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -1976,6 +2007,8 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
+  '@fourplusweb/config@0.2.0': {}
+
   '@fourplusweb/eslint-config@0.1.1(eslint@10.2.1(jiti@2.6.1))(typescript@6.0.3)':
     dependencies:
       '@eslint/js': 9.39.4
@@ -1986,6 +2019,26 @@ snapshots:
       - eslint
       - supports-color
       - typescript
+
+  '@fourplusweb/ui@0.2.0(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react@19.2.5)':
+    dependencies:
+      '@fourplusweb/config': 0.2.0
+      '@fourplusweb/utils': 0.1.1
+      '@hookform/resolvers': 5.2.2(react-hook-form@7.72.1(react@19.2.5))
+      next: 16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      react: 19.2.5
+      react-hook-form: 7.72.1(react@19.2.5)
+      zod: 4.3.6
+
+  '@fourplusweb/utils@0.1.1':
+    dependencies:
+      clsx: 2.1.1
+      tailwind-merge: 3.5.0
+
+  '@hookform/resolvers@5.2.2(react-hook-form@7.72.1(react@19.2.5))':
+    dependencies:
+      '@standard-schema/utils': 0.3.0
+      react-hook-form: 7.72.1(react@19.2.5)
 
   '@humanfs/core@0.19.2':
     dependencies:
@@ -2194,6 +2247,8 @@ snapshots:
 
   '@next/swc-win32-x64-msvc@16.2.4':
     optional: true
+
+  '@standard-schema/utils@0.3.0': {}
 
   '@swc/helpers@0.5.15':
     dependencies:
@@ -2523,6 +2578,8 @@ snapshots:
   character-reference-invalid@2.0.1: {}
 
   client-only@0.0.1: {}
+
+  clsx@2.1.1: {}
 
   collapse-white-space@2.1.0: {}
 
@@ -3813,6 +3870,10 @@ snapshots:
       react: 19.2.5
       scheduler: 0.27.0
 
+  react-hook-form@7.72.1(react@19.2.5):
+    dependencies:
+      react: 19.2.5
+
   react@19.2.5: {}
 
   reading-time@1.5.0: {}
@@ -4110,6 +4171,8 @@ snapshots:
       client-only: 0.0.1
       react: 19.2.5
 
+  tailwind-merge@3.5.0: {}
+
   tailwindcss@4.2.2: {}
 
   tapable@2.3.2: {}
@@ -4287,5 +4350,7 @@ snapshots:
   word-wrap@1.2.5: {}
 
   yocto-queue@0.1.0: {}
+
+  zod@4.3.6: {}
 
   zwitch@2.0.4: {}
