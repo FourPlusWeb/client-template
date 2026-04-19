@@ -1,6 +1,9 @@
 import config from "@fourplusweb/eslint-config";
 
 export default [
+  {
+    ignores: [".next/**", ".claude/**", "next-env.d.ts"],
+  },
   ...config,
   {
     rules: {

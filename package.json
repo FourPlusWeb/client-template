@@ -16,9 +16,9 @@
     "verify:auth": "bash scripts/verify-auth.sh"
   },
   "dependencies": {
-    "@fourplusweb/config": "^0.2.0",
-    "@fourplusweb/ui": "^0.2.0",
-    "@fourplusweb/utils": "^0.1.1",
+    "@fourplusweb/config": "0.2.2",
+    "@fourplusweb/ui": "0.2.2",
+    "@fourplusweb/utils": "0.1.2",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.2.4",
@@ -34,7 +34,7 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
-    "@fourplusweb/eslint-config": "^0.1.1",
+    "@fourplusweb/eslint-config": "0.1.1",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/mdx": "^2.0.13",
     "@types/node": "^25.6.0",

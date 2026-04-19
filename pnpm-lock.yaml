@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@fourplusweb/config':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: 0.2.2
+        version: 0.2.2
       '@fourplusweb/ui':
-        specifier: ^0.2.0
-        version: 0.2.0(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react@19.2.5)
+        specifier: 0.2.2
+        version: 0.2.2(@fourplusweb/config@0.2.2)(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@fourplusweb/utils':
-        specifier: ^0.1.1
-        version: 0.1.1
+        specifier: 0.1.2
+        version: 0.1.2
       '@mdx-js/loader':
         specifier: ^3.1.1
         version: 3.1.1
@@ -58,7 +58,7 @@ importers:
         version: 4.0.1
     devDependencies:
       '@fourplusweb/eslint-config':
-        specifier: ^0.1.1
+        specifier: 0.1.1
         version: 0.1.1(eslint@10.2.1(jiti@2.6.1))(typescript@6.0.3)
       '@tailwindcss/postcss':
         specifier: ^4.2.2
@@ -131,20 +131,22 @@ packages:
     resolution: {integrity: sha512-rZAP3aVgB9ds9KOeUSL+zZ21hPmo8dh6fnIFwRQj5EAZl9gzR7wxYbYXYysAM8CTqGmUGyp2S4kUdV17MnGuWQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  '@fourplusweb/config@0.2.0':
-    resolution: {integrity: sha512-krbmfp+ZrCWbBxFfvEdC7VTDNadNgh4d0Vr5Sjl1Ich6uNmEbfx7/qn1c8C6V7F4zkeDvTdKlFzLp361xjrm5w==, tarball: https://npm.pkg.github.com/download/@fourplusweb/config/0.2.0/5c703682ad9012a9862010833f4a9d7d675a86ca}
+  '@fourplusweb/config@0.2.2':
+    resolution: {integrity: sha512-A42jZFTJeZK7pEN3vpTJPxzMVE79kwEwyNwBznD+zlYrcsauisF5BUd7rb/F0FurJbsiEYPngDb4adzNgfe4Ow==, tarball: https://npm.pkg.github.com/download/@fourplusweb/config/0.2.2/d0a18f09eaecbb0673b7682a1d99d00ebe01ab7a}
 
   '@fourplusweb/eslint-config@0.1.1':
     resolution: {integrity: sha512-kkCZU7ghxbVYtu0B/xTw1d4WDp7jhjC9Psz1B4cH0VZozo+9aEJ3v6+IUItY5q2/mAdZvzSOigiSIjG5du9Ngg==, tarball: https://npm.pkg.github.com/download/@fourplusweb/eslint-config/0.1.1/92614250003590d7f1ce1c94b7262cd82b48f164}
 
-  '@fourplusweb/ui@0.2.0':
-    resolution: {integrity: sha512-virlXM45Q6PdgA+J+3l1MUwTFcSmzrKktGVN64Zqs1ZJcq6T4HYIRLz2sqOGGDuK40FsBUN/4ETc6vnrRwfu2Q==, tarball: https://npm.pkg.github.com/download/@fourplusweb/ui/0.2.0/a69bd214344999645f76a599c6012d5eee1e9039}
+  '@fourplusweb/ui@0.2.2':
+    resolution: {integrity: sha512-ZYX75ErxJEQ3Yfk8d6es5lFZe8I3dHhzcmONdc1nJHZULI5I9Ve/Uooel0gyIZfrOOf42s5nLHokj5U1ux4zXA==, tarball: https://npm.pkg.github.com/download/@fourplusweb/ui/0.2.2/25d571420f4f466197d0ef07aef9b87bf7a74229}
     peerDependencies:
-      next: ^14 || ^15
+      '@fourplusweb/config': ^0.2.2
+      next: ^14 || ^15 || ^16
       react: ^18 || ^19
+      react-dom: ^18 || ^19
 
-  '@fourplusweb/utils@0.1.1':
-    resolution: {integrity: sha512-z2faQhTleM8/B9cLUbqbSU0k/kq4Gu6dwRZqneSXkpB/UFeIHXNL+8EMvRtvtLiihM3gnvccU96hFern8Pse+A==, tarball: https://npm.pkg.github.com/download/@fourplusweb/utils/0.1.1/da580a0a861b31efaf063869f5cd98b26c69bbb4}
+  '@fourplusweb/utils@0.1.2':
+    resolution: {integrity: sha512-2NXbK1tpAzHx5LN1ZUXBMpFnCmQm7B0QLGjwzFnAx6SmwjlhGuN3x0SkHlIYmvBtLPnDex7i/e1frmmC4eXeMA==, tarball: https://npm.pkg.github.com/download/@fourplusweb/utils/0.1.2/5e9c46c69bbc90bfef278af8692ee1a0f90f5d57}
 
   '@hookform/resolvers@5.2.2':
     resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
@@ -2007,7 +2009,7 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
-  '@fourplusweb/config@0.2.0': {}
+  '@fourplusweb/config@0.2.2': {}
 
   '@fourplusweb/eslint-config@0.1.1(eslint@10.2.1(jiti@2.6.1))(typescript@6.0.3)':
     dependencies:
@@ -2020,17 +2022,18 @@ snapshots:
       - supports-color
       - typescript
 
-  '@fourplusweb/ui@0.2.0(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react@19.2.5)':
+  '@fourplusweb/ui@0.2.2(@fourplusweb/config@0.2.2)(next@16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
-      '@fourplusweb/config': 0.2.0
-      '@fourplusweb/utils': 0.1.1
+      '@fourplusweb/config': 0.2.2
+      '@fourplusweb/utils': 0.1.2
       '@hookform/resolvers': 5.2.2(react-hook-form@7.72.1(react@19.2.5))
       next: 16.2.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       react: 19.2.5
+      react-dom: 19.2.5(react@19.2.5)
       react-hook-form: 7.72.1(react@19.2.5)
       zod: 4.3.6
 
-  '@fourplusweb/utils@0.1.1':
+  '@fourplusweb/utils@0.1.2':
     dependencies:
       clsx: 2.1.1
       tailwind-merge: 3.5.0
