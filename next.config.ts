@@ -1,3 +1,4 @@
+import path from "node:path";
 import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
 
@@ -12,6 +13,7 @@ const config: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   pageExtensions: ["ts", "tsx", "md", "mdx"],
+  outputFileTracingRoot: path.resolve(process.cwd(), ".."),
 };
 
-export default withMDX(config);
+export default withMDX(config) as NextConfig;
