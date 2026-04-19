@@ -1,0 +1,20 @@
+# Netlify build configuration — committed as the blessed deploy default.
+# Other hosts (Vercel, Cloudflare, self-host) remain opt-in; see DEPLOY.md.
+
+[build]
+  command = "pnpm build"
+  publish = ".next"
+
+[build.environment]
+  # Pin Node to match engines in package.json. Update both together.
+  NODE_VERSION = "22"
+  # pnpm via corepack — Netlify's default package manager detection
+  # covers pnpm, but pinning avoids surprises on base image updates.
+  NPM_FLAGS = "--version"  # noop, forces Netlify to skip npm install
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# NODE_AUTH_TOKEN must be set as an environment variable in Netlify UI:
+# Site Settings → Environment variables → Add (Deploy contexts: All).
+# Scope: classic PAT with read:packages (see DEPLOY.md troubleshooting).
