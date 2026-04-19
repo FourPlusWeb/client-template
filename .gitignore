@@ -7,8 +7,6 @@ dist
 !.env.example
 .DS_Store
 *.log
-.npmrc
-!.npmrc.example
 /test-results/
 /playwright-report/
 
