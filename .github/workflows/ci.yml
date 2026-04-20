@@ -24,20 +24,10 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
           scope: "@fourplusweb"
 
-      # Exchange GitHub App private key for a short-lived installation token.
-      # Scoped to packages:read on studio-packages + client-template;
-      # rotates on every workflow run (~1h lifetime).
-      - uses: actions/create-github-app-token@v1
-        id: app-token
-        with:
-          app-id: ${{ secrets.PACKAGES_APP_ID }}
-          private-key: ${{ secrets.PACKAGES_APP_PRIVATE_KEY }}
-          owner: FourPlusWeb
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         env:
-          NODE_AUTH_TOKEN: ${{ steps.app-token.outputs.token }}
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
 
       - name: Typecheck
         run: pnpm typecheck
@@ -48,4 +38,4 @@ jobs:
       - name: Build
         run: pnpm build
         env:
-          NODE_AUTH_TOKEN: ${{ steps.app-token.outputs.token }}
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
