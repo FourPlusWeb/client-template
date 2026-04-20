@@ -1,8 +1,26 @@
 # CLAUDE.md — Client Template
 
-Generic Next.js 16 starter за корпоративни сайтове. Клиентско репо се създава чрез GitHub "Use this template".
+Generic Next.js 16 starter за корпоративни сайтове. Клиентско репо се създава чрез `@fourplusweb/create-site` CLI (preferred) или GitHub "Use this template" fallback.
 
 **Human developers: start with [README.md](README.md).** This file is AI-oriented guidance.
+
+## Creating a new client site
+
+Use the scaffolder instead of manually forking this template:
+
+```sh
+npx @fourplusweb/create-site my-client
+```
+
+Prompts for brand values, archetype (A1–A6), variation (P1–P6), and optionally
+auto-creates a GitHub repo under `FourPlusWeb/<slug>` plus a linked Netlify
+site with `NODE_AUTH_TOKEN` pre-set. Env-var fallback (`GITHUB_TOKEN`,
+`NETLIFY_TOKEN`, `NODE_AUTH_TOKEN`) enables non-interactive CI use. See
+`@fourplusweb/create-site/README.md` for details.
+
+**Manual fallback:** if the CLI is unavailable, use the GitHub "Use this
+template" button at the top of the client-template repo and hand-edit
+`site.config.ts` + `BRIEF.md`. Expect ~30–60 min vs. ~5 min with the CLI.
 
 ## Къде е какво
 
