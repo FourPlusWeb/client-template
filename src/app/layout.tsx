@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
-import { Footer, Header, type FooterSocialItem } from "@fourplusweb/ui";
+import {
+  Analytics,
+  ConsentProvider,
+  CookieBanner,
+  Footer,
+  Header,
+  SentryInit,
+  type FooterSocialItem,
+} from "@fourplusweb/ui";
 import { themeToCSS } from "@fourplusweb/config";
 import { siteConfig } from "../../site.config";
 import { ScrollReveal } from "../components/ScrollReveal";
@@ -52,19 +60,24 @@ export default function RootLayout({
   return (
     <html lang={siteConfig.locale} style={themeToCSS(siteConfig)}>
       <body className="antialiased">
-        <Header
-          logo={<span className="font-display text-lg">{siteConfig.name}</span>}
-          nav={siteConfig.nav}
-        />
-        <ScrollReveal />
-        <main className="relative">{children}</main>
-        <Footer
-          logo={<span className="font-display text-lg">{siteConfig.name}</span>}
-          nav={siteConfig.nav}
-          contact={siteConfig.contact}
-          social={socialItems}
-          copyright={`© ${new Date().getFullYear()} ${siteConfig.name}. Всички права запазени.`}
-        />
+        <ConsentProvider>
+          <SentryInit config={siteConfig.monitoring} />
+          <Header
+            logo={<span className="font-display text-lg">{siteConfig.name}</span>}
+            nav={siteConfig.nav}
+          />
+          <ScrollReveal />
+          <main className="relative">{children}</main>
+          <Footer
+            logo={<span className="font-display text-lg">{siteConfig.name}</span>}
+            nav={siteConfig.nav}
+            contact={siteConfig.contact}
+            social={socialItems}
+            copyright={`© ${new Date().getFullYear()} ${siteConfig.name}. Всички права запазени.`}
+          />
+          <CookieBanner />
+          <Analytics config={siteConfig.analytics} />
+        </ConsentProvider>
       </body>
     </html>
   );

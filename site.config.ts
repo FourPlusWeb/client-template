@@ -39,4 +39,21 @@ export const siteConfig: SiteConfig = {
     { label: "Блог", href: "/blog" },
     { label: "Контакти", href: "/contact" },
   ],
+
+  // Uncomment and fill to enable analytics. Requires user consent via
+  // CookieBanner (already wired in layout.tsx).
+  // analytics: {
+  //   plausible: { domain: "example.com" },
+  //   // ga4: { id: "G-XXXXXXXXXX" },
+  //   // fathom: { id: "ABCDEFGH" },
+  // },
+
+  // Uncomment and fill to enable Sentry. Requires installing @sentry/nextjs
+  // as a direct dep (it's an optional peer of @fourplusweb/ui).
+  // monitoring: {
+  //   sentry: {
+  //     dsn: "https://xxx@sentry.io/xxx",
+  //     tracesSampleRate: 0.1,
+  //   },
+  // },
 };
