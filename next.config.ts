@@ -14,6 +14,10 @@ const config: NextConfig = {
   poweredByHeader: false,
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   outputFileTracingRoot: path.resolve(process.cwd(), ".."),
+  // Standalone output for the committed Dockerfile fallback path.
+  // Netlify (blessed default) ignores this; Docker/self-host consume
+  // .next/standalone/. Safe to leave enabled across hosts.
+  output: "standalone",
 };
 
 export default withMDX(config) as NextConfig;
