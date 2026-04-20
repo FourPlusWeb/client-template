@@ -26,10 +26,16 @@ RUN corepack enable
 # Copy manifests first for layer-cache friendliness.
 COPY package.json pnpm-lock.yaml .npmrc ./
 
-# Install dependencies with the PAT mounted as a BuildKit secret. The
-# secret content is exposed as env NODE_AUTH_TOKEN for this RUN only;
-# pnpm reads it via ${NODE_AUTH_TOKEN} in .npmrc and never persists it.
-RUN --mount=type=secret,id=node_auth_token,env=NODE_AUTH_TOKEN \
+# Install dependencies with the PAT mounted as a BuildKit secret at
+# /run/secrets/node_auth_token (BuildKit's default target path). We read
+# it inline as NODE_AUTH_TOKEN for this RUN only; pnpm reads that via
+# ${NODE_AUTH_TOKEN} in .npmrc and it never persists to any image layer.
+#
+# File-target pattern is used (not `env=...`) because the `env=` option
+# on --mount=type=secret requires Dockerfile syntax 1.10+; the file-target
+# form works on every BuildKit version and on every docker/buildx setup.
+RUN --mount=type=secret,id=node_auth_token \
+    NODE_AUTH_TOKEN="$(cat /run/secrets/node_auth_token)" \
     pnpm install --frozen-lockfile
 
 # Now copy source and build. Next 16 with output:"standalone" produces
