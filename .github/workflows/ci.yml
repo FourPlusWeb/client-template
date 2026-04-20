@@ -56,7 +56,11 @@ jobs:
           context: .
           push: false
           tags: client-template:ci
-          build-args: |
-            NODE_AUTH_TOKEN=${{ secrets.PACKAGES_READ_TOKEN }}
+          # BuildKit secret — NOT build-arg. Keeps PACKAGES_READ_TOKEN out of
+          # image layers and out of the GHA build cache metadata. Consumed by
+          # `RUN --mount=type=secret,id=node_auth_token,env=NODE_AUTH_TOKEN`
+          # in the Dockerfile.
+          secrets: |
+            node_auth_token=${{ secrets.PACKAGES_READ_TOKEN }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

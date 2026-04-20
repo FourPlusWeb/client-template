@@ -10,6 +10,14 @@ dist
 /test-results/
 /playwright-report/
 
+# Next.js 16 auto-regenerates next-env.d.ts with different content between
+# `pnpm dev` (writes .next/dev/types/routes.d.ts reference) and `pnpm build`
+# (writes .next/types/routes.d.ts reference). Next's official docs say to
+# commit this file, but in 16.x that makes the working tree perpetually
+# dirty for anyone running both commands locally. Ignored here until Next
+# stabilizes the path. TypeScript types still resolve correctly at build time.
+next-env.d.ts
+
 # Claude Code — not tracked in template. Fork consumers run their own
 # sessions with their own settings.
 .claude/
