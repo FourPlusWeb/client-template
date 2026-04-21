@@ -16,7 +16,8 @@
     "typecheck": "tsc --noEmit",
     "verify:auth": "bash scripts/verify-auth.sh",
     "playbook:sync": "bash scripts/sync-playbook.sh",
-    "images:prep": "bash scripts/prep-images.sh"
+    "images:prep": "bash scripts/prep-images.sh",
+    "legal:fill": "node scripts/fill-legal.mjs"
   },
   "dependencies": {
     "@fourplusweb/config": "1.0.2",
@@ -41,6 +42,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@clack/prompts": "^1.2.0",
     "@fourplusweb/eslint-config": "0.1.1",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/mdx": "^2.0.13",

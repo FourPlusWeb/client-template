@@ -5,7 +5,7 @@ export const metadata = {
 
 # Политика за поверителност
 
-*Последна актуализация: `{{DATE — замени с реалната дата}}`*
+*Последна актуализация: `{{DATE}}`*
 
 > ⚠️ **Това е шаблон, не правен съвет.** Клиентът отговаря за adapt-ването
 > на този документ към неговата конкретна дейност и jurisdictia. Препоръчва се
@@ -20,7 +20,7 @@ Email: `{{CONTACT_EMAIL}}`
 ## 2. Какви данни събираме
 
 - **Cookies и analytics:** при съгласие събираме анонимна статистика за
-  посетените страници (IP маскиран, без fingerprinting) чрез `{{PROVIDER — Plausible/GA4/Fathom}}`.
+  посетените страници (IP маскиран, без fingerprinting) чрез `{{ANALYTICS_PROVIDER}}`.
 - **Contact форма:** при изпращане запазваме име, email и съобщение с
   единствена цел отговор.
 - **Error monitoring (Sentry):** автоматично събираме error reports при
@@ -41,7 +41,7 @@ Email: `{{CONTACT_EMAIL}}`
 
 ## 4. Срок на съхранение
 
-- Analytics данни: `{{RETENTION — обикновено 14-26 месеца per provider}}`.
+- Analytics данни: `{{RETENTION}}`.
 - Contact съобщения: до 24 месеца от последна кореспонденция.
 - Error reports: 30 дни в Sentry.
 
@@ -65,7 +65,7 @@ Email: `{{CONTACT_EMAIL}}`
   [resend.com/legal/dpa](https://resend.com/legal/dpa). Данни
   processed: име + email + телефон (optional) + съобщение, at
   submission time only. Retention: според клиентската inbox policy.
-- `{{HOSTING — Netlify / Vercel / etc.}}` — hosting + CDN
+- `{{HOSTING}}` — hosting + CDN
 
 ## 7. Контакти
 

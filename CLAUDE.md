@@ -103,11 +103,28 @@ Template ships with opt-in analytics + cookie consent baseline. To enable:
 
 1. Set `siteConfig.analytics.<provider>` in `site.config.ts` (Plausible / GA4 / Fathom).
 2. Set `siteConfig.monitoring.sentry.dsn` if using Sentry — also install `@sentry/nextjs` as a direct dep.
-3. Review + adapt `src/app/privacy-policy/page.mdx` and `src/app/terms/page.mdx` for the client's jurisdiction and activities. Replace `{{TODO}}` placeholders.
+3. Review + adapt `src/app/privacy-policy/page.mdx` and `src/app/terms/page.mdx` for the client's jurisdiction and activities. Replace `{{PLACEHOLDER}}` markers — see "Legal boilerplate fill-in" below.
 
 **⚠️ Legal disclaimer:** The privacy-policy and terms MDX files are
 **structural placeholders**, NOT legal advice. The client must get legal
 sign-off before publishing. Studio is not liable for inadequate adaptation.
+
+### Legal boilerplate fill-in
+
+Template ships privacy-policy + terms MDX with `{{PLACEHOLDER}}` markers.
+For interactive fill-in:
+
+```sh
+pnpm legal:fill
+```
+
+Prompts for each unique placeholder с context; updates both files in
+place. Extend `scripts/fill-legal.mjs` `DESCRIPTIONS` map if adding new
+tokens to templates. Placeholders must match `/\{\{([A-Z_]+)\}\}/` —
+bare uppercase + underscore, no inline annotations.
+
+⚠️ Filled output is still DRAFT. Client must get legal review before
+publishing — structural boilerplate is not legal advice.
 
 **Consent flow:** analytics scripts load only after the user clicks "Приемам"
 in `<CookieBanner />`. Sentry loads unconditionally (treated as essential
