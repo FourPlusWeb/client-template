@@ -17,8 +17,11 @@ template" button on the `client-template` repo → clone locally → follow
 **Studio-internal path (existing `@fourplusweb/*` auth):**
 
 ```sh
+cd ~/Projects/fourplus   # or another sibling dir — NOT inside WebAI/
 npx @fourplusweb/create-site my-client
 ```
+
+`create-site` scaffolds into `cwd()/<slug>`. Run it from a studio-scoped sibling directory, never from inside `WebAI/` — the meta-repo is studio-only and client sites have their own remotes.
 
 The CLI is a productivity tool for studio staff / authorized contributors
 who already have `.npmrc` + `NODE_AUTH_TOKEN` wired up — the same auth
