@@ -27,6 +27,7 @@
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.2.4",
     "@react-email/components": "^1.0.12",
+    "@sentry/nextjs": "^9.47.1",
     "framer-motion": "^12.38.0",
     "gray-matter": "^4.0.3",
     "lucide-react": "^1.8.0",
