@@ -142,11 +142,22 @@ merge. Това е разликата между "документирана fal
 
 ### 401 при install на `@fourplusweb/*`
 
-- Потвърди че `NODE_AUTH_TOKEN` е set-нат на host-а
-- Потвърди че token-ът е **classic PAT** (започва с `ghp_`), НЕ fine-grained
-- Потвърди scope `read:packages`
-- Потвърди че GitHub акаунтът, генерирал token-а, е **member на `FourPlusWeb` org**
-- Token setup / provisioning / rotation problems → see studio's `ACCESS.md` (workspace repo).
+Single source of truth: [`ACCESS.md`](../ACCESS.md) в workspace root (или
+studio's canonical access doc). DEPLOY.md не дублира detailed troubleshooting
+— auth драйф между docs причини миналия одит (GITHUB_TOKEN vs PACKAGES_READ_TOKEN
+vs NODE_AUTH_TOKEN). Един източник, едно име.
+
+Short version: нужен е **classic** GitHub PAT (започва с `ghp_`, не fine-grained)
+със scope `read:packages`, exposed на build environment-а като:
+
+- **Host build env (Netlify/Vercel/Cloudflare/self-host):** `NODE_AUTH_TOKEN`
+- **GitHub Actions на client repo-то:** repository secret `PACKAGES_READ_TOKEN`
+  (името е каквото `ci.yml` референцира — built-in `GITHUB_TOKEN` не може
+  да чете packages от друг repo-registry, виж `ACCESS.md` за пълното
+  обяснение).
+
+Първа диагностична стъпка при 401 — `pnpm verify:auth` локално. Той
+разграничава token / scope / org-membership проблеми.
 
 ### Build fail с "Cannot find module"
 

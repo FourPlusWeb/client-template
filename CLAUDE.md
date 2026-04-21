@@ -1,26 +1,35 @@
 # CLAUDE.md — Client Template
 
-Generic Next.js 16 starter за корпоративни сайтове. Клиентско репо се създава чрез `@fourplusweb/create-site` CLI (preferred) или GitHub "Use this template" fallback.
+Generic Next.js 16 starter за корпоративни сайтове. Fresh client forks започват
+с GitHub "Use this template" — това е default пътят за new clients. Studio
+staff със съществуващ `@fourplusweb/*` auth могат опционално да ползват
+`@fourplusweb/create-site` CLI за по-бърз scaffold.
 
 **Human developers: start with [README.md](README.md).** This file is AI-oriented guidance.
 
 ## Creating a new client site
 
-Use the scaffolder instead of manually forking this template:
+**Default path (fresh contributor, no existing auth):** GitHub "Use this
+template" button on the `client-template` repo → clone locally → follow
+`README.md` "First 5 minutes" (PAT + `NODE_AUTH_TOKEN` export) → hand-edit
+`site.config.ts` + `BRIEF.md`. Expect ~30–60 min.
+
+**Studio-internal path (existing `@fourplusweb/*` auth):**
 
 ```sh
 npx @fourplusweb/create-site my-client
 ```
+
+The CLI is a productivity tool for studio staff / authorized contributors
+who already have `.npmrc` + `NODE_AUTH_TOKEN` wired up — the same auth
+needed to resolve `@fourplusweb/create-site` itself from the private
+registry. It's NOT the first-line onboarding entry for fresh client devs.
 
 Prompts for brand values, archetype (A1–A6), variation (P1–P6), and optionally
 auto-creates a GitHub repo under `FourPlusWeb/<slug>` plus a linked Netlify
 site with `NODE_AUTH_TOKEN` pre-set. Env-var fallback (`GITHUB_TOKEN`,
 `NETLIFY_TOKEN`, `NODE_AUTH_TOKEN`) enables non-interactive CI use. See
 `@fourplusweb/create-site/README.md` for details.
-
-**Manual fallback:** if the CLI is unavailable, use the GitHub "Use this
-template" button at the top of the client-template repo and hand-edit
-`site.config.ts` + `BRIEF.md`. Expect ~30–60 min vs. ~5 min with the CLI.
 
 ## Къде е какво
 
@@ -47,7 +56,7 @@ template" button at the top of the client-template repo and hand-edit
 
 - `pnpm dev` — локален сървър на :3000
 - `pnpm build` — production build
-- `pnpm lint` / `pnpm typecheck` / `pnpm test:visual`
+- `pnpm lint` / `pnpm typecheck`
 - `pnpm verify:auth` — GitHub Packages auth preflight (401 при install → пусни това)
 - `pnpm playbook:sync` — refresh `docs/playbook/` snapshots from sibling studio-factory
 
