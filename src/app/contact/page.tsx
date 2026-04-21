@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import {
-  ContactForm,
   Container,
   FluidSection,
   SectionHeading,
 } from "@fourplusweb/ui";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { siteConfig } from "../../../site.config";
-import { submitContactPlaceholder } from "./actions";
+import { ContactFormWrapper } from "./ContactFormWrapper";
 
 export const metadata: Metadata = {
   title: "Контакти",
@@ -44,7 +43,7 @@ export default function ContactPage() {
               като съдържание. Това е достатъчно, за да започнем.
             </p>
             <div className="mt-8">
-              <ContactForm onSubmit={submitContactPlaceholder} />
+              <ContactFormWrapper />
             </div>
           </section>
 
