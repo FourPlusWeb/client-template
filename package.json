@@ -18,8 +18,8 @@
     "playbook:sync": "bash scripts/sync-playbook.sh"
   },
   "dependencies": {
-    "@fourplusweb/config": "0.3.0",
-    "@fourplusweb/ui": "1.0.0",
+    "@fourplusweb/config": "1.0.2",
+    "@fourplusweb/ui": "1.0.2",
     "@fourplusweb/utils": "0.1.2",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",

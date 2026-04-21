@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@fourplusweb/config':
-        specifier: 0.3.0
-        version: 0.3.0
+        specifier: 1.0.2
+        version: 1.0.2
       '@fourplusweb/ui':
-        specifier: 1.0.0
-        version: 1.0.0(@fourplusweb/config@0.3.0)(@sentry/nextjs@9.47.1(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.1))(next@16.2.4(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react@19.2.5)(webpack@5.106.2))(next@16.2.4(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        specifier: 1.0.2
+        version: 1.0.2(@fourplusweb/config@1.0.2)(@sentry/nextjs@9.47.1(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.1))(next@16.2.4(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react@19.2.5)(webpack@5.106.2))(next@16.2.4(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@fourplusweb/utils':
         specifier: 0.1.2
         version: 0.1.2
@@ -198,16 +198,16 @@ packages:
     resolution: {integrity: sha512-rZAP3aVgB9ds9KOeUSL+zZ21hPmo8dh6fnIFwRQj5EAZl9gzR7wxYbYXYysAM8CTqGmUGyp2S4kUdV17MnGuWQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  '@fourplusweb/config@0.3.0':
-    resolution: {integrity: sha512-tKSVVHoJatyWlEkxFhS/L2vdqx9W5vjgZgJbmmtrddz1XQ4Z78RvEohdCxagUWVkLaCZRioWIt6D3jYjUl5R5Q==, tarball: https://npm.pkg.github.com/download/@fourplusweb/config/0.3.0/335ecc0db00ddbacc5f664adc7cb22feda77a982}
+  '@fourplusweb/config@1.0.2':
+    resolution: {integrity: sha512-ADtnVH9qTmIYSu/2dwZZBPGElJZUfytqdVDUjuxCzESlGicepQZIKZALMvARnV5go+wLlJjp72yQJTxqeyI7ow==, tarball: https://npm.pkg.github.com/download/@fourplusweb/config/1.0.2/cc1f59984f1d8f628f2669d9cc32366e77c7c8ee}
 
   '@fourplusweb/eslint-config@0.1.1':
     resolution: {integrity: sha512-kkCZU7ghxbVYtu0B/xTw1d4WDp7jhjC9Psz1B4cH0VZozo+9aEJ3v6+IUItY5q2/mAdZvzSOigiSIjG5du9Ngg==, tarball: https://npm.pkg.github.com/download/@fourplusweb/eslint-config/0.1.1/92614250003590d7f1ce1c94b7262cd82b48f164}
 
-  '@fourplusweb/ui@1.0.0':
-    resolution: {integrity: sha512-sSpxQq3YW1tjAK4rWczQbgvsubQQNhcLddCiu/nLz1xx/y3ecrENlkcq3jKTvhL6OknufD81N5AC9bgzCR5gJw==, tarball: https://npm.pkg.github.com/download/@fourplusweb/ui/1.0.0/510f31c1345fe17ab00d18cf62c2c118ff739431}
+  '@fourplusweb/ui@1.0.2':
+    resolution: {integrity: sha512-2jXpX3YcewQuID3OhPYni5/RTqfZ9L2/oZ+mQ7HyKLUSFlWlyS2B1u6zZSteDKceFpyec58BQJtIFkJqoIfyfw==, tarball: https://npm.pkg.github.com/download/@fourplusweb/ui/1.0.2/faedd97f478f7416f908e5eadc6cb40d1cf26f5e}
     peerDependencies:
-      '@fourplusweb/config': ^0.3.0
+      '@fourplusweb/config': ^1.0.2
       '@sentry/nextjs': ^8 || ^9
       next: ^14 || ^15 || ^16
       react: ^18 || ^19
@@ -3178,7 +3178,7 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
-  '@fourplusweb/config@0.3.0': {}
+  '@fourplusweb/config@1.0.2': {}
 
   '@fourplusweb/eslint-config@0.1.1(eslint@10.2.1(jiti@2.6.1))(typescript@6.0.3)':
     dependencies:
@@ -3191,9 +3191,9 @@ snapshots:
       - supports-color
       - typescript
 
-  '@fourplusweb/ui@1.0.0(@fourplusweb/config@0.3.0)(@sentry/nextjs@9.47.1(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.1))(next@16.2.4(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react@19.2.5)(webpack@5.106.2))(next@16.2.4(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@fourplusweb/ui@1.0.2(@fourplusweb/config@1.0.2)(@sentry/nextjs@9.47.1(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.1))(next@16.2.4(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react@19.2.5)(webpack@5.106.2))(next@16.2.4(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
-      '@fourplusweb/config': 0.3.0
+      '@fourplusweb/config': 1.0.2
       '@fourplusweb/utils': 0.1.2
       '@hookform/resolvers': 5.2.2(react-hook-form@7.72.1(react@19.2.5))
       '@sentry/nextjs': 9.47.1(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.1))(next@16.2.4(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react@19.2.5)(webpack@5.106.2)
