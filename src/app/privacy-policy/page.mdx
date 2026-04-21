@@ -23,8 +23,13 @@ Email: `{{CONTACT_EMAIL}}`
   посетените страници (IP маскиран, без fingerprinting) чрез `{{PROVIDER — Plausible/GA4/Fathom}}`.
 - **Contact форма:** при изпращане запазваме име, email и съобщение с
   единствена цел отговор.
-- **Error monitoring (Sentry):** автоматично събираме анонимни доклади
-  при грешки в сайта (URL, browser, stack trace; **без** personal data).
+- **Error monitoring (Sentry):** автоматично събираме error reports при
+  грешки в сайта (URL, browser, stack trace). **IP address се маскира
+  server-side**; user identifiers не се прикачват. Основание: легитимен
+  интерес (чл. 6(1)(f) GDPR) — мониторинг на функционалността на сайта.
+  Пълен списък събирани полета: в Sentry-то DPA (Data Processing
+  Agreement) — ако клиентът активира Sentry, трябва да signне DPA чрез
+  Sentry UI (Settings → Legal & Compliance).
 
 ## 3. Основание за обработка (GDPR чл. 6)
 
