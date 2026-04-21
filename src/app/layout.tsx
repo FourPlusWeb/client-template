@@ -52,6 +52,13 @@ const socialItems: FooterSocialItem[] = Object.entries(siteConfig.social ?? {}).
   ([label, href]) => ({ label, href }),
 );
 
+// Two-DSN resolution: client-specific DSN always wins; studio fallback catches
+// sites that haven't configured their own Sentry project yet. Undefined → no-op.
+const sentryDsn =
+  process.env.NEXT_PUBLIC_SENTRY_DSN ||
+  process.env.NEXT_PUBLIC_SENTRY_DSN_STUDIO_DEFAULT ||
+  undefined;
+
 export default function RootLayout({
   children,
 }: {
@@ -61,7 +68,7 @@ export default function RootLayout({
     <html lang={siteConfig.locale} style={themeToCSS(siteConfig)}>
       <body className="antialiased">
         <ConsentProvider>
-          <SentryInit config={siteConfig.monitoring} />
+          <SentryInit dsn={sentryDsn} siteName={siteConfig.name} />
           <Header
             logo={<span className="font-display text-lg">{siteConfig.name}</span>}
             nav={siteConfig.nav}

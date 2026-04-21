@@ -102,8 +102,35 @@ Document in handoff checklist. See `playbook/delivery.md`.
 Template ships with opt-in analytics + cookie consent baseline. To enable:
 
 1. Set `siteConfig.analytics.<provider>` in `site.config.ts` (Plausible / GA4 / Fathom).
-2. Set `siteConfig.monitoring.sentry.dsn` if using Sentry — also install `@sentry/nextjs` as a direct dep.
+2. Sentry DSN comes from env vars (NOT `siteConfig.monitoring`) — see "Error monitoring" below.
 3. Review + adapt `src/app/privacy-policy/page.mdx` and `src/app/terms/page.mdx` for the client's jurisdiction and activities. Replace `{{PLACEHOLDER}}` markers — see "Legal boilerplate fill-in" below.
+
+### Error monitoring (Sentry, dual-DSN)
+
+Every client site reports Sentry events somewhere by default — to the
+FourPlus Studio fleet project unless the client runs their own. DSN
+resolution at `layout.tsx` (priority order):
+
+1. `NEXT_PUBLIC_SENTRY_DSN` — client-specific override. Set this when the
+   client provisions their own Sentry project.
+2. `NEXT_PUBLIC_SENTRY_DSN_STUDIO_DEFAULT` — FourPlus Studio fallback.
+   Pre-set at the Netlify deployment level by studio staff (or by
+   `@fourplusweb/create-site` on scaffold).
+3. Undefined — Sentry is a silent no-op. Legitimate for local dev.
+
+Events are tagged on init:
+
+- `studioFleet: "fourplusweb"` — fixed at build.
+- `siteName: "<siteConfig.name>"` — set from `site.config.ts`.
+
+In the studio Sentry project, filter `studioFleet:fourplusweb
+siteName:"<client>"` to see one site's events. See `ACCESS.md` §Sentry
+for ownership, rotation, and offboarding when a client leaves.
+
+**Local dev smoke:** drop a temporary `throw new Error("...")` in a page,
+set `NEXT_PUBLIC_SENTRY_DSN_STUDIO_DEFAULT=<dev-dsn>` in `.env.local`,
+run `pnpm dev`, trigger the page — event should land in the studio
+project tagged with the local `siteConfig.name`.
 
 **⚠️ Legal disclaimer:** The privacy-policy and terms MDX files are
 **structural placeholders**, NOT legal advice. The client must get legal
