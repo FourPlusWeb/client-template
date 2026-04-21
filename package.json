@@ -20,8 +20,8 @@
     "legal:fill": "node scripts/fill-legal.mjs"
   },
   "dependencies": {
-    "@fourplusweb/config": "1.0.2",
-    "@fourplusweb/ui": "1.0.2",
+    "@fourplusweb/config": "1.0.3",
+    "@fourplusweb/ui": "1.0.3",
     "@fourplusweb/utils": "0.1.2",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
