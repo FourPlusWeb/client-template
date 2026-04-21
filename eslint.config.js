@@ -13,4 +13,15 @@ export default [
       "jsx-a11y/aria-role": "off",
     },
   },
+  {
+    // Node CLI scripts (build helpers, codegen, asset pipelines). Browser
+    // globals like `window` are unavailable here; `console` / `process` are.
+    files: ["scripts/**/*.{mjs,js}"],
+    languageOptions: {
+      globals: {
+        console: "readonly",
+        process: "readonly",
+      },
+    },
+  },
 ];

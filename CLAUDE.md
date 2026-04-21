@@ -60,6 +60,43 @@ site with `NODE_AUTH_TOKEN` pre-set. Env-var fallback (`GITHUB_TOKEN`,
 - `pnpm verify:auth` — GitHub Packages auth preflight (401 при install → пусни това)
 - `pnpm playbook:sync` — refresh `docs/playbook/` snapshots from sibling studio-factory
 
+## Contact form
+
+Ships with Resend като default email backend за `/contact` form
+notifications (MVP, W6.1 — full Phase 10 scope deferred).
+
+**Required env var:** `RESEND_API_KEY`. In local dev, submissions log to
+the console without sending if the key is missing (safe smoke-testing).
+In production (`NODE_ENV=production`) без key → submit returns a user-
+visible error pointing to `siteConfig.contact.email`.
+
+**Per-client config (optional env vars):**
+
+- `RESEND_NOTIFY_EMAIL` — recipient override. Defaults to
+  `siteConfig.contact.email`.
+- `RESEND_FROM` — sender address. Defaults to `noreply@<site-domain>`.
+  Domain must be verified in Resend dashboard (SPF + DKIM at client's
+  DNS provider) for deliverability.
+
+**Security layers (defense in depth):**
+
+1. Client-side Zod validation via `@fourplusweb/ui` ContactForm
+   (length caps: name 200, email 254, phone 30, message 5000).
+2. Server-side Zod re-validation in
+   [`src/app/contact/actions.ts`](src/app/contact/actions.ts) — direct
+   POSTs bypass the client-side layer, so never trust it alone.
+3. Honeypot: hidden `website` field in the ui package auto-rejects bot
+   submissions (silent success returned so the trap stays hidden).
+4. In-memory rate limit: 3 submissions per IP per 5-minute window.
+   Resets on cold start; acceptable for SMB volume. Upgrade to a shared
+   store (Upstash/Redis) if scaling beyond one function instance.
+
+**Logging:** metadata only (masked email, truncated IP, message char
+count). Never log the message body — GDPR minimization.
+
+**DNS setup per client:** SPF + DKIM records from Resend dashboard.
+Document in handoff checklist. See `playbook/delivery.md`.
+
 ## Analytics & Legal
 
 Template ships with opt-in analytics + cookie consent baseline. To enable:
@@ -76,6 +113,31 @@ sign-off before publishing. Studio is not liable for inadequate adaptation.
 in `<CookieBanner />`. Sentry loads unconditionally (treated as essential
 service telemetry per privacy policy §3). Users can reopen the banner by
 clearing the `cookie-consent` cookie (no UI for this yet; add if needed).
+
+## Image pipeline
+
+Client-provided images (phones, cameras) usually arrive като 3–5 MB JPEGs
+без responsive variants. Local pipeline ги преработва преди commit:
+
+1. Сложи originals в `raw-assets/` (gitignored — НЕ commit-вай raw images).
+2. Run `pnpm images:prep`.
+3. Output: `public/images/<base>-<width>.{webp,jpg,avif}` за widths 400 / 800 / 1600.
+   AVIF се генерира само на 1600 (diminishing returns под това).
+4. Commit `public/images/*` (runtime artifacts).
+5. Consume в компоненти:
+
+   ```tsx
+   <ResponsiveImage src="/images/hero-1600.webp" alt="…" aspectRatio="16/9" />
+   ```
+
+   `ResponsiveImage` използва `next/image` с `fill` + един `src` —
+   Next.js сам прави runtime srcset от source-а. Pre-generated 400 / 800
+   variants служат за non-Next consumers (raw `<img>` в MDX, OG, email).
+
+Quality settings: WebP 82, JPEG 85 (mozjpeg), AVIF 70.
+
+**HEIC caveat:** `sharp` често е build-нат без libheif. При HEIC error
+скриптът прескача файла и казва да го конвертираш към JPG/PNG първо.
 
 ## Playbook справки
 

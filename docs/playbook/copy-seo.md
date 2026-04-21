@@ -1,4 +1,4 @@
-> **Read-only snapshot** of `studio-factory/playbook/copy-seo.md` (authoritative source). Snapshot taken: 2026-04-19.
+> **Read-only snapshot** of `studio-factory/playbook/copy-seo.md` (authoritative source). Snapshot taken: 2026-04-21.
 
 # Copy and SEO Playbook
 

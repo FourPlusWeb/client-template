@@ -21,3 +21,8 @@ next-env.d.ts
 # Claude Code — not tracked in template. Fork consumers run their own
 # sessions with their own settings.
 .claude/
+
+# Raw client-provided images (phone/camera originals). Process through
+# `pnpm images:prep` — optimized variants land in public/images/ and ARE
+# committed; the multi-MB originals are not.
+raw-assets/

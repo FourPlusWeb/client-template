@@ -1,4 +1,4 @@
-> **Read-only snapshot** of `studio-factory/playbook/assets.md` (authoritative source). Snapshot taken: 2026-04-19.
+> **Read-only snapshot** of `studio-factory/playbook/assets.md` (authoritative source). Snapshot taken: 2026-04-21.
 
 # Asset Pipeline
 
@@ -81,11 +81,21 @@ export const metadata = {
 
 **Pipeline преди commit в `public/`:**
 
-1. **Raw file** (от client или stock) в `_assets-raw/` (в `.gitignore`).
-2. **Resize** до max dimension = 2× максимален display size. Напр. ако hero се показва на 1920×1080 → source е 3840×2160 (за retina).
-3. **Convert** към WebP (primary) + JPG fallback. AVIF за hero/featured images (Next.js image handles това автоматично при `next/image`).
-4. **Compress:** quality 75–82 за photos, 90+ за product screenshots с text.
-5. **Tools:** `sharp` CLI, Squoosh, ImageOptim, или `@squoosh/cli` в CI.
+`client-template` ships `pnpm images:prep` (виж `scripts/prep-images.mjs`)
+— стандартният процес. Не оптимизирай ръчно през online tools, ако
+сценариите по-долу го покриват.
+
+1. **Raw file** (от client или stock) в `raw-assets/` (gitignored — НЕ commit-вай originals).
+2. **Run `pnpm images:prep`.** Скриптът използва `sharp` за:
+   - Auto-rotate по EXIF (телефонни снимки идват често с rotation метаданни).
+   - Resize до 3 widths: 400 / 800 / 1600px (`withoutEnlargement` — никога upscale).
+   - Encode WebP @ q82 + JPEG @ q85 (mozjpeg) за всеки width.
+   - AVIF @ q70 само на 1600 (diminishing returns под това; AVIF encoding е 5–10× по-бавен).
+3. **Output**: `public/images/<base>-<width>.{webp,jpg,avif}` — commit-ват се (runtime artifacts).
+4. **Quality settings** в скрипта са tuned за photos. За product screenshots с дребен text:
+   - Или ръчно `sharp` с по-високо quality (90+),
+   - Или ръчно през Squoosh / ImageOptim.
+5. **HEIC limitation:** `sharp` често е build-нат без libheif. Ако скриптът фейл-не на `.heic` файл — convert към JPG/PNG първо (Preview / `magick convert`).
 
 **Naming convention:**
 ```
@@ -116,7 +126,11 @@ public/images/
 Всяко изображение в компоненти използва `<ResponsiveImage>` от `@fourplusweb/ui` (виж PLAN#component-library → ResponsiveImage API).
 
 **Задължителни props:**
-- `src` — абсолютен път от `public/` (напр. `/images/hero/home-hero.webp`)
+- `src` — абсолютен път от `public/` (напр. `/images/home-hero-1600.webp`).
+  При `pnpm images:prep` output-а sочи към най-голямата variant (`-1600.webp`)
+  — `next/image` (зад `<ResponsiveImage fill>`) сам прави runtime srcset
+  от source-а. По-малките 400/800 variants служат за non-Next consumers
+  (raw `<img>` в MDX, OG, email).
 - `alt` — descriptive, не filename. За decorative images: `alt=""` + `aria-hidden`.
 - `aspectRatio` — винаги. Предотвратява CLS.
 - `sizes` — hint според context (`full`/`half`/`third`/`card`).
