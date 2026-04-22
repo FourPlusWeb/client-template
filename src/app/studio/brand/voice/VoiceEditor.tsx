@@ -28,7 +28,7 @@ const ERR_TEXT = "mt-1 text-xs text-red-700";
 export function VoiceEditor({ initial }: { initial: VoiceData }) {
   const [data, setData] = useState<VoiceData>(initial);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+  const { save, status, diffOpen, currentContent, pendingData, closeDiff, confirmSave } =
     useSectionSave("voice", renderVoice, renderVoice(initial));
 
   const set = <K extends keyof VoiceData>(key: K, val: VoiceData[K]) =>
@@ -307,7 +307,7 @@ export function VoiceEditor({ initial }: { initial: VoiceData }) {
       {diffOpen && (
         <DiffModal
           current={currentContent}
-          next={newContent}
+          next={renderVoice(pendingData!)}
           onConfirm={confirmSave}
           onCancel={closeDiff}
         />

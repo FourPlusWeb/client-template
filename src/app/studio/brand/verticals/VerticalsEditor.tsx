@@ -13,7 +13,7 @@ const EMPTY_ROW: VerticalRow = { name: "", hook: "", signatureEmphasis: "" };
 
 export function VerticalsEditor({ initial }: { initial: VerticalsData }) {
   const [data, setData] = useState<VerticalsData>(initial);
-  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+  const { save, status, diffOpen, currentContent, pendingData, closeDiff, confirmSave } =
     useSectionSave("verticals", renderVerticals, renderVerticals(initial));
 
   const updateRow = (i: number, patch: Partial<VerticalRow>) => {
@@ -114,7 +114,7 @@ export function VerticalsEditor({ initial }: { initial: VerticalsData }) {
       {diffOpen && (
         <DiffModal
           current={currentContent}
-          next={newContent}
+          next={renderVerticals(pendingData!)}
           onConfirm={confirmSave}
           onCancel={closeDiff}
         />

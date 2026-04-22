@@ -18,7 +18,7 @@ const ERR_TEXT = "mt-1 text-xs text-red-700";
 export function IdentityEditor({ initial }: { initial: IdentityData }) {
   const [data, setData] = useState<IdentityData>(initial);
   const [errors, setErrors] = useState<Partial<Record<keyof IdentityData, string>>>({});
-  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+  const { save, status, diffOpen, currentContent, pendingData, closeDiff, confirmSave } =
     useSectionSave(SLUG, renderIdentity, renderIdentity(initial));
 
   const update = <K extends keyof IdentityData>(key: K, value: IdentityData[K]) => {
@@ -139,7 +139,7 @@ export function IdentityEditor({ initial }: { initial: IdentityData }) {
       {diffOpen && (
         <DiffModal
           current={currentContent}
-          next={newContent}
+          next={renderIdentity(pendingData!)}
           onConfirm={confirmSave}
           onCancel={closeDiff}
         />

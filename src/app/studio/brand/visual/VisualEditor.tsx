@@ -16,7 +16,7 @@ function isValidHex(v: string): boolean {
 export function VisualEditor({ initial }: { initial: VisualData }) {
   const [data, setData] = useState<VisualData>(initial);
   const [updateConfig, setUpdateConfig] = useState(false);
-  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+  const { save, status, diffOpen, currentContent, pendingData, closeDiff, confirmSave } =
     useSectionSave("visual", renderVisual, renderVisual(initial));
 
   const setColor = (key: keyof VisualColors, value: string) => {
@@ -169,7 +169,7 @@ export function VisualEditor({ initial }: { initial: VisualData }) {
       {diffOpen && (
         <DiffModal
           current={currentContent}
-          next={newContent}
+          next={renderVisual(pendingData!)}
           onConfirm={() => confirmSave({ updateSiteConfig: updateConfig })}
           onCancel={closeDiff}
         />

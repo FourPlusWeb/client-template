@@ -17,7 +17,7 @@ export function ArchitectureEditor({ initial }: { initial: ArchitectureData }) {
   const [data, setData] = useState<ArchitectureData>(initial);
   const [customPage, setCustomPage] = useState("");
   const [updateConfig, setUpdateConfig] = useState(false);
-  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+  const { save, status, diffOpen, currentContent, pendingData, closeDiff, confirmSave } =
     useSectionSave("architecture", renderArchitecture, renderArchitecture(initial));
 
   const setNav = (next: NavItem[]) => setData((d) => ({ ...d, nav: next }));
@@ -226,7 +226,7 @@ export function ArchitectureEditor({ initial }: { initial: ArchitectureData }) {
       {diffOpen && (
         <DiffModal
           current={currentContent}
-          next={newContent}
+          next={renderArchitecture(pendingData!)}
           onConfirm={() => confirmSave({ updateSiteConfig: updateConfig })}
           onCancel={closeDiff}
         />

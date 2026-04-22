@@ -11,7 +11,7 @@ import {
 
 export function OpenFieldsEditor({ initial }: { initial: OpenFieldsData }) {
   const [items, setItems] = useState(initial.items);
-  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+  const { save, status, diffOpen, currentContent, pendingData, closeDiff, confirmSave } =
     useSectionSave<OpenFieldsData>("open-fields", (d) => renderOpenFields(d), renderOpenFields(initial));
 
   const patch = (i: number, next: { label?: string; status?: OpenFieldStatus; note?: string }) => {
@@ -105,7 +105,7 @@ export function OpenFieldsEditor({ initial }: { initial: OpenFieldsData }) {
       {diffOpen && (
         <DiffModal
           current={currentContent}
-          next={newContent}
+          next={renderOpenFields(pendingData!)}
           onConfirm={confirmSave}
           onCancel={closeDiff}
         />

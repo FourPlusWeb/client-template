@@ -26,7 +26,7 @@ const ERR_TEXT = "mt-1 text-xs text-red-700";
 export function PositioningEditor({ initial }: { initial: PositioningData }) {
   const [data, setData] = useState<PositioningData>(initial);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+  const { save, status, diffOpen, currentContent, pendingData, closeDiff, confirmSave } =
     useSectionSave("positioning", renderPositioning, renderPositioning(initial));
 
   const set = <K extends keyof PositioningData>(key: K, val: PositioningData[K]) =>
@@ -366,7 +366,7 @@ export function PositioningEditor({ initial }: { initial: PositioningData }) {
       {diffOpen && (
         <DiffModal
           current={currentContent}
-          next={newContent}
+          next={renderPositioning(pendingData!)}
           onConfirm={confirmSave}
           onCancel={closeDiff}
         />

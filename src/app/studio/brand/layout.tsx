@@ -66,6 +66,7 @@ export default function BrandLayout({
           <button
             type="button"
             onClick={toggleDryRun}
+            title={dryRun ? "Dry run: changes will be logged but not saved" : "Save changes to BRAND.md"}
             className={`flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium transition-colors ${
               dryRun
                 ? "border-amber-400 bg-amber-50 text-amber-700"

@@ -12,7 +12,7 @@ export function SectionEditor({
   initial: string;
 }) {
   const [body, setBody] = useState(initial);
-  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+  const { save, status, diffOpen, currentContent, pendingData, closeDiff, confirmSave } =
     useSectionSave<string>(slug, (s) => s, initial);
 
   const handleSave = () => {
@@ -54,7 +54,7 @@ export function SectionEditor({
       {diffOpen && (
         <DiffModal
           current={currentContent}
-          next={newContent}
+          next={pendingData!}
           onConfirm={confirmSave}
           onCancel={closeDiff}
         />
