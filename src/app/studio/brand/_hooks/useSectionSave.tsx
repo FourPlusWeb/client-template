@@ -139,7 +139,6 @@ export function DiffModal({
       onClick={onCancel}
       onKeyDown={(e) => { if (e.key === "Escape") onCancel(); }}
     >
-      /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
       <div
         role="document"
         style={{
