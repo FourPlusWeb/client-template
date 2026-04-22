@@ -209,8 +209,17 @@ routes (`src/app/studio/brand/<slug>/`) вземат превес пред catch
 | `identity` | 5 текстови полета: name, tagline, oneLine, locale, market |
 | `positioning` | categoryClaim таблица, moat, trustEquation, valueArchitecture, comparisonMatrix |
 | `voice` | bannedWords/formatting чипове, signatureRule, competitorRule, outcomeRule, hierarchy, personality, toneMatrix, internalTest |
-| `verticals`, `open-fields`, `visual`, `architecture` | Също така per-field форми |
-| Останалите | Generic textarea fallback (`SectionEditor.tsx`) |
+| `verticals` | Таблица с vertical/hook/signature |
+| `open-fields` | Редактируем checklist (label, status, note) |
+| `visual` | 9 цвята (color picker + hex), typography, radii, motion, extended ramps |
+| `architecture` | Nav editor (label + href, reorder), pages multi-select, archetype/variation dropdowns |
+| `personas`, `narratives`, `competitive`, `sales` | Generic textarea fallback (`SectionEditor.tsx`) |
+
+**site.config.ts writeback:** `visual` и `architecture` имат опционална
+кутия "Also update site.config.ts". Когато е включена, API-то записва
+цветове + шрифтове (за `visual`) или nav + variation (за `architecture`)
+обратно в `site.config.ts` чрез regex rewriter
+(`src/lib/site-config-writer.ts`). Преди запис винаги прави `.bak`.
 
 **lib договори:**
 - `src/lib/brand-sections/<slug>.ts` — изнася `parse<Name>()`,
@@ -219,7 +228,16 @@ routes (`src/app/studio/brand/<slug>/`) вземат превес пред catch
   react-hook-form + zod, POST към `/api/studio/brand`
 - `src/app/studio/brand/<slug>/page.tsx` — async server component
 
-**Запазване:** Save POST-ва към `/api/studio/brand` с `{ slug, content }`.
-API-то записва само съответната секция в `BRAND.md` и оставя `BRAND.md.bak`.
+**API:** `POST /api/studio/brand` с `{ slug, content, updateSiteConfig? }`.
+`DELETE /api/studio/brand` трие всички `.bak` файлове.
 
-**Тестове:** `pnpm test` — 22 теста (vitest), всички round-trip стабилни.
+**Polish (Batch D):**
+- `src/app/studio/brand/_hooks/useSectionSave.ts` — споделен hook с diff modal.
+  Cmd/Ctrl+S отваря модала; Esc затваря.
+- Dry-run toggle (горе-дясно в layout) — при включено "Confirm" става
+  "Log (dry-run)" и API връща `wouldWrite` без да записва файлове.
+- Бутон "Clear backups" на `/studio/brand` index — извиква DELETE и
+  показва броя изтрити `.bak` файла.
+- `*.bak` файловете са в `.gitignore`.
+
+**Тестове:** `pnpm test` — 37 теста (vitest), всички round-trip стабилни.

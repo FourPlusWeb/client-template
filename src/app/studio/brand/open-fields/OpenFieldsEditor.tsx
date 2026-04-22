@@ -1,15 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useSectionSave, DiffModal, type SaveStatus } from "../_hooks/useSectionSave";
+import { useSectionSave, DiffModal } from "../_hooks/useSectionSave";
 import {
   OPEN_FIELD_STATUS,
   renderOpenFields,
   type OpenFieldStatus,
   type OpenFieldsData,
 } from "../../../../lib/brand-sections/open-fields";
-
-type Status = SaveStatus;
 
 export function OpenFieldsEditor({ initial }: { initial: OpenFieldsData }) {
   const [items, setItems] = useState(initial.items);

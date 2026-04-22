@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useSectionSave, DiffModal, type SaveStatus } from "../_hooks/useSectionSave";
+import { useSectionSave, DiffModal } from "../_hooks/useSectionSave";
 import {
   identitySchema,
   renderIdentity,
   type IdentityData,
 } from "../../../../lib/brand-sections/identity";
-
-type Status = SaveStatus;
 
 const SLUG = "identity";
 const LABEL = "block w-full text-xs font-medium uppercase tracking-wider text-neutral-700 mb-1";

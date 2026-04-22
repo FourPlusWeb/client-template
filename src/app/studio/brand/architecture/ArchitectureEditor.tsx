@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSectionSave, DiffModal, type SaveStatus } from "../_hooks/useSectionSave";
+import { useSectionSave, DiffModal } from "../_hooks/useSectionSave";
 import {
   ARCHETYPES,
   COMMON_PAGES,
@@ -12,8 +12,6 @@ import {
   type NavItem,
   type VariationId,
 } from "../../../../lib/brand-sections/architecture";
-
-type Status = SaveStatus;
 
 export function ArchitectureEditor({ initial }: { initial: ArchitectureData }) {
   const [data, setData] = useState<ArchitectureData>(initial);

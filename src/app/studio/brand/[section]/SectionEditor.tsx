@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useSectionSave, DiffModal, type SaveStatus } from "../_hooks/useSectionSave";
+import { useSectionSave, DiffModal } from "../_hooks/useSectionSave";
 import type { SectionSlug } from "../../../../lib/brand-md";
-
-type Status = SaveStatus;
 
 export function SectionEditor({
   slug,

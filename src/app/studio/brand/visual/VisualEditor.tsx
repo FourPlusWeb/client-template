@@ -1,15 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useSectionSave, DiffModal, type SaveStatus } from "../_hooks/useSectionSave";
+import { useSectionSave, DiffModal } from "../_hooks/useSectionSave";
 import {
   COLOR_KEYS,
   renderVisual,
   type VisualColors,
   type VisualData,
 } from "../../../../lib/brand-sections/visual";
-
-type Status = SaveStatus;
 
 function isValidHex(v: string): boolean {
   return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(v);

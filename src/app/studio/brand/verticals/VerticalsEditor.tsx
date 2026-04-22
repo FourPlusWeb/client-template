@@ -9,8 +9,6 @@ import {
   type VerticalRow,
 } from "../../../../lib/brand-sections/verticals";
 
-type Status = SaveStatus;
-
 const EMPTY_ROW: VerticalRow = { name: "", hook: "", signatureEmphasis: "" };
 
 export function VerticalsEditor({ initial }: { initial: VerticalsData }) {
@@ -140,7 +138,7 @@ function SaveBar({
   status,
   onSave,
 }: {
-  status: Status;
+  status: SaveStatus;
   onSave: () => void;
 }) {
   return (

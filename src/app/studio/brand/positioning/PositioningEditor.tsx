@@ -12,8 +12,6 @@ import {
   type ComparisonMatrix,
 } from "../../../../lib/brand-sections/positioning";
 
-type Status = SaveStatus;
-
 const INPUT =
   "w-full rounded border border-neutral-300 bg-white px-3 py-2 font-mono text-sm text-neutral-900 focus:border-neutral-900 focus:outline-none";
 const TEXTAREA = INPUT + " min-h-[80px] resize-y";
@@ -381,7 +379,7 @@ function SaveBar({
   status,
   onSave,
 }: {
-  status: Status;
+  status: SaveStatus;
   onSave: () => void;
 }) {
   return (

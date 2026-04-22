@@ -116,7 +116,11 @@ export function DiffModal({
   const dryRun = localStorage.getItem("brand-dry-run") === "1";
 
   return (
+    /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Confirm changes"
       style={{
         position: "fixed",
         inset: 0,
@@ -127,8 +131,11 @@ export function DiffModal({
         zIndex: 100,
       }}
       onClick={onCancel}
+      onKeyDown={(e) => { if (e.key === "Escape") onCancel(); }}
     >
+      /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
       <div
+        role="document"
         style={{
           background: "white",
           borderRadius: 12,
@@ -142,6 +149,7 @@ export function DiffModal({
           gap: 16,
         }}
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => { e.stopPropagation(); }}
       >
         <h2 style={{ fontWeight: 600, margin: 0 }}>Confirm changes</h2>
         <div
