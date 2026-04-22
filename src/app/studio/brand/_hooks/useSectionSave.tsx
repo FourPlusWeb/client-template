@@ -18,6 +18,7 @@ export function useSectionSave<TData>(
   const [pendingData, setPendingData] = useState<TData | null>(null);
   const [diffOpen, setDiffOpen] = useState(false);
   const [currentContent, setCurrentContent] = useState(initialContent);
+  const lastDataRef = useRef<TData | null>(null);
   const extrasRef = useRef<Record<string, unknown>>({});
   const router = useRouter();
 
@@ -41,6 +42,9 @@ export function useSectionSave<TData>(
         if (pendingData) {
           const rendered = renderFn(pendingData);
           openDiff(pendingData, rendered, currentContent);
+        } else if (lastDataRef.current) {
+          const rendered = renderFn(lastDataRef.current);
+          openDiff(lastDataRef.current, rendered, currentContent);
         } else if (diffOpen) {
           closeDiff();
         }
@@ -55,6 +59,7 @@ export function useSectionSave<TData>(
 
   const save = useCallback(
     (data: TData) => {
+      lastDataRef.current = data;
       setPendingData(data);
       const rendered = renderFn(data);
       openDiff(data, rendered, currentContent);
