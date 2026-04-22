@@ -59,7 +59,7 @@ site with `NODE_AUTH_TOKEN` pre-set. Env-var fallback (`GITHUB_TOKEN`,
 
 - `pnpm dev` — локален сървър на :3000
 - `pnpm build` — production build
-- `pnpm lint` / `pnpm typecheck`
+- `pnpm lint` / `pnpm typecheck` / `pnpm test`
 - `pnpm verify:auth` — GitHub Packages auth preflight (401 при install → пусни това)
 - `pnpm playbook:sync` — refresh `docs/playbook/` snapshots from sibling studio-factory
 
@@ -191,3 +191,35 @@ Quality settings: WebP 82, JPEG 85 (mozjpeg), AVIF 70.
 Archetypes, variations, brief, copy/SEO, assets са snapshot-нати в
 [`docs/playbook/`](docs/playbook/) (read-only, refresh с `pnpm playbook:sync`).
 Canonical source: `studio-factory/playbook/` (не се изисква в клиентските fork-ове).
+
+## Brand Studio (`/studio/brand`)
+
+`/studio/brand` е dev-only editor за `BRAND.md`. Достъпен само локално
+(блокиран в production от middleware).
+
+**Структура:** `BRAND.md` се състои от 11 номерирани секции. Всяка секция има
+собствен slug (`identity`, `positioning`, `voice`, …). Per-section статични
+routes (`src/app/studio/brand/<slug>/`) вземат превес пред catchall
+`[section]`.
+
+**Пер-секционни страници и форми:**
+
+| Slug | Форма |
+|---|---|
+| `identity` | 5 текстови полета: name, tagline, oneLine, locale, market |
+| `positioning` | categoryClaim таблица, moat, trustEquation, valueArchitecture, comparisonMatrix |
+| `voice` | bannedWords/formatting чипове, signatureRule, competitorRule, outcomeRule, hierarchy, personality, toneMatrix, internalTest |
+| `verticals`, `open-fields`, `visual`, `architecture` | Също така per-field форми |
+| Останалите | Generic textarea fallback (`SectionEditor.tsx`) |
+
+**lib договори:**
+- `src/lib/brand-sections/<slug>.ts` — изнася `parse<Name>()`,
+  `render<Name>()`, Zod schema, типове и defaults
+- `src/app/studio/brand/<slug>/<Name>Editor.tsx` — `"use client"` форма с
+  react-hook-form + zod, POST към `/api/studio/brand`
+- `src/app/studio/brand/<slug>/page.tsx` — async server component
+
+**Запазване:** Save POST-ва към `/api/studio/brand` с `{ slug, content }`.
+API-то записва само съответната секция в `BRAND.md` и оставя `BRAND.md.bak`.
+
+**Тестове:** `pnpm test` — 22 теста (vitest), всички round-trip стабилни.

@@ -5,6 +5,12 @@ import {
   sectionBySlug,
   writeBrandSection,
 } from "../../../../lib/brand-md";
+import { parseVisual } from "../../../../lib/brand-sections/visual";
+import { parseArchitecture } from "../../../../lib/brand-sections/architecture";
+import {
+  writeColorsAndFonts,
+  writeNavAndVariation,
+} from "../../../../lib/site-config-writer";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -32,7 +38,7 @@ export async function POST(request: Request) {
   const blocked = prodBlock();
   if (blocked) return blocked;
 
-  let body: { slug?: string; content?: string };
+  let body: { slug?: string; content?: string; updateSiteConfig?: boolean };
   try {
     body = await request.json();
   } catch {
@@ -51,13 +57,41 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: `Unknown section slug: ${body.slug}` }, { status: 400 });
   }
 
+  // Step 1: always write BRAND.md. If this fails, bail out before touching
+  // site.config.ts — we only mirror changes that are already persisted.
   try {
     await writeBrandSection(meta.slug, body.content);
-    return NextResponse.json({ ok: true, slug: meta.slug });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ error: msg }, { status: 500 });
   }
+
+  // Step 2: optional mirror to site.config.ts. Independent write — if it
+  // fails the BRAND.md change stays and we surface the error so the client
+  // can show both.
+  let siteConfigUpdated = false;
+  let siteConfigError: string | null = null;
+  if (body.updateSiteConfig && (meta.slug === "visual" || meta.slug === "architecture")) {
+    try {
+      if (meta.slug === "visual") {
+        const visual = parseVisual(body.content);
+        await writeColorsAndFonts(visual.colors, visual.typography);
+      } else {
+        const arch = parseArchitecture(body.content);
+        await writeNavAndVariation(arch.nav, arch.variation);
+      }
+      siteConfigUpdated = true;
+    } catch (err) {
+      siteConfigError = err instanceof Error ? err.message : String(err);
+    }
+  }
+
+  return NextResponse.json({
+    ok: true,
+    slug: meta.slug,
+    siteConfigUpdated,
+    ...(siteConfigError ? { siteConfigError } : {}),
+  });
 }
 
 export async function DELETE() {
