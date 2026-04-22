@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useSectionSave, DiffModal, type SaveStatus } from "../_hooks/useSectionSave";
 import type { SectionSlug } from "../../../../lib/brand-md";
 
-type Status = { kind: "idle" } | { kind: "saving" } | { kind: "ok" } | { kind: "err"; msg: string };
+type Status = SaveStatus;
 
 export function SectionEditor({
   slug,
@@ -14,28 +14,11 @@ export function SectionEditor({
   initial: string;
 }) {
   const [body, setBody] = useState(initial);
-  const [status, setStatus] = useState<Status>({ kind: "idle" });
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+    useSectionSave<string>(slug, (s) => s, initial);
 
-  const save = async () => {
-    setStatus({ kind: "saving" });
-    try {
-      const res = await fetch("/api/studio/brand", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, content: body }),
-      });
-      if (!res.ok) {
-        const msg = await res.text();
-        setStatus({ kind: "err", msg });
-        return;
-      }
-      setStatus({ kind: "ok" });
-      startTransition(() => router.refresh());
-    } catch (err) {
-      setStatus({ kind: "err", msg: err instanceof Error ? err.message : String(err) });
-    }
+  const handleSave = () => {
+    save(body);
   };
 
   return (
@@ -49,8 +32,8 @@ export function SectionEditor({
       <div className="mt-4 flex items-center gap-3">
         <button
           type="button"
-          onClick={save}
-          disabled={status.kind === "saving" || isPending}
+          onClick={handleSave}
+          disabled={status.kind === "saving"}
           className="rounded-full bg-neutral-900 px-5 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-50"
         >
           {status.kind === "saving" ? "Saving..." : "Save section"}
@@ -70,6 +53,14 @@ export function SectionEditor({
         v1 edits raw Markdown for this section. Per-field forms (color
         pickers, persona rows, etc.) land in later batches.
       </p>
+      {diffOpen && (
+        <DiffModal
+          current={currentContent}
+          next={newContent}
+          onConfirm={confirmSave}
+          onCancel={closeDiff}
+        />
+      )}
     </div>
   );
 }

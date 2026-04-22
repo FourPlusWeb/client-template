@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useSectionSave, DiffModal, type SaveStatus } from "../_hooks/useSectionSave";
 import {
   OPEN_FIELD_STATUS,
   renderOpenFields,
@@ -9,13 +9,12 @@ import {
   type OpenFieldsData,
 } from "../../../../lib/brand-sections/open-fields";
 
-type Status = { kind: "idle" } | { kind: "saving" } | { kind: "ok" } | { kind: "err"; msg: string };
+type Status = SaveStatus;
 
 export function OpenFieldsEditor({ initial }: { initial: OpenFieldsData }) {
   const [items, setItems] = useState(initial.items);
-  const [status, setStatus] = useState<Status>({ kind: "idle" });
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+    useSectionSave<OpenFieldsData>("open-fields", (d) => renderOpenFields(d), renderOpenFields(initial));
 
   const patch = (i: number, next: { label?: string; status?: OpenFieldStatus; note?: string }) => {
     setItems(items.map((item, idx) => (idx === i ? { ...item, ...next } : item)));
@@ -23,27 +22,8 @@ export function OpenFieldsEditor({ initial }: { initial: OpenFieldsData }) {
   const add = () => setItems([...items, { label: "", status: "todo" }]);
   const remove = (i: number) => setItems(items.filter((_, idx) => idx !== i));
 
-  const save = async () => {
-    setStatus({ kind: "saving" });
-    try {
-      const res = await fetch("/api/studio/brand", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          slug: "open-fields",
-          content: renderOpenFields({ items }),
-        }),
-      });
-      if (!res.ok) {
-        const msg = await res.text();
-        setStatus({ kind: "err", msg });
-        return;
-      }
-      setStatus({ kind: "ok" });
-      startTransition(() => router.refresh());
-    } catch (err) {
-      setStatus({ kind: "err", msg: err instanceof Error ? err.message : String(err) });
-    }
+  const handleSave = () => {
+    save({ items });
   };
 
   return (
@@ -108,8 +88,8 @@ export function OpenFieldsEditor({ initial }: { initial: OpenFieldsData }) {
       <div className="flex items-center gap-3 border-t border-neutral-200 pt-4">
         <button
           type="button"
-          onClick={save}
-          disabled={status.kind === "saving" || isPending}
+          onClick={handleSave}
+          disabled={status.kind === "saving"}
           className="rounded-full bg-neutral-900 px-5 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-50"
         >
           {status.kind === "saving" ? "Saving..." : "Save section"}
@@ -123,6 +103,15 @@ export function OpenFieldsEditor({ initial }: { initial: OpenFieldsData }) {
           <span className="font-mono text-[11px] uppercase tracking-wider text-red-700">{status.msg}</span>
         )}
       </div>
+
+      {diffOpen && (
+        <DiffModal
+          current={currentContent}
+          next={newContent}
+          onConfirm={confirmSave}
+          onCancel={closeDiff}
+        />
+      )}
     </div>
   );
 }

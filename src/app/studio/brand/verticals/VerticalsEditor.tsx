@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useSectionSave, DiffModal, type SaveStatus } from "../_hooks/useSectionSave";
 import {
   renderVerticals,
   verticalsSchema,
@@ -9,15 +9,14 @@ import {
   type VerticalRow,
 } from "../../../../lib/brand-sections/verticals";
 
-type Status = { kind: "idle" } | { kind: "saving" } | { kind: "ok" } | { kind: "err"; msg: string };
+type Status = SaveStatus;
 
 const EMPTY_ROW: VerticalRow = { name: "", hook: "", signatureEmphasis: "" };
 
 export function VerticalsEditor({ initial }: { initial: VerticalsData }) {
   const [data, setData] = useState<VerticalsData>(initial);
-  const [status, setStatus] = useState<Status>({ kind: "idle" });
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+    useSectionSave("verticals", renderVerticals, renderVerticals(initial));
 
   const updateRow = (i: number, patch: Partial<VerticalRow>) => {
     setData((d) => ({
@@ -31,28 +30,12 @@ export function VerticalsEditor({ initial }: { initial: VerticalsData }) {
   const removeRow = (i: number) =>
     setData((d) => ({ ...d, verticals: d.verticals.filter((_, idx) => idx !== i) }));
 
-  const save = async () => {
+  const handleSave = () => {
     const parsed = verticalsSchema.safeParse(data);
     if (!parsed.success) {
-      setStatus({ kind: "err", msg: parsed.error.issues.map((e) => e.message).join("; ") });
       return;
     }
-    setStatus({ kind: "saving" });
-    try {
-      const res = await fetch("/api/studio/brand", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug: "verticals", content: renderVerticals(parsed.data) }),
-      });
-      if (!res.ok) {
-        setStatus({ kind: "err", msg: await res.text() });
-        return;
-      }
-      setStatus({ kind: "ok" });
-      startTransition(() => router.refresh());
-    } catch (err) {
-      setStatus({ kind: "err", msg: err instanceof Error ? err.message : String(err) });
-    }
+    save(parsed.data);
   };
 
   return (
@@ -128,7 +111,16 @@ export function VerticalsEditor({ initial }: { initial: VerticalsData }) {
         </div>
       </div>
 
-      <SaveBar status={status} pending={isPending} onSave={save} />
+      <SaveBar status={status} onSave={handleSave} />
+
+      {diffOpen && (
+        <DiffModal
+          current={currentContent}
+          next={newContent}
+          onConfirm={confirmSave}
+          onCancel={closeDiff}
+        />
+      )}
     </div>
   );
 }
@@ -146,11 +138,9 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function SaveBar({
   status,
-  pending,
   onSave,
 }: {
   status: Status;
-  pending: boolean;
   onSave: () => void;
 }) {
   return (
@@ -158,7 +148,7 @@ function SaveBar({
       <button
         type="button"
         onClick={onSave}
-        disabled={status.kind === "saving" || pending}
+        disabled={status.kind === "saving"}
         className="rounded-full bg-neutral-900 px-5 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-50"
       >
         {status.kind === "saving" ? "Saving..." : "Save section"}

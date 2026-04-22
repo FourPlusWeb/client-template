@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useSectionSave, DiffModal, type SaveStatus } from "../_hooks/useSectionSave";
 import {
   positioningSchema,
   renderPositioning,
@@ -12,11 +12,7 @@ import {
   type ComparisonMatrix,
 } from "../../../../lib/brand-sections/positioning";
 
-type Status =
-  | { kind: "idle" }
-  | { kind: "saving" }
-  | { kind: "ok" }
-  | { kind: "err"; msg: string };
+type Status = SaveStatus;
 
 const INPUT =
   "w-full rounded border border-neutral-300 bg-white px-3 py-2 font-mono text-sm text-neutral-900 focus:border-neutral-900 focus:outline-none";
@@ -32,9 +28,8 @@ const ERR_TEXT = "mt-1 text-xs text-red-700";
 export function PositioningEditor({ initial }: { initial: PositioningData }) {
   const [data, setData] = useState<PositioningData>(initial);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<Status>({ kind: "idle" });
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+    useSectionSave("positioning", renderPositioning, renderPositioning(initial));
 
   const set = <K extends keyof PositioningData>(key: K, val: PositioningData[K]) =>
     setData((d) => ({ ...d, [key]: val }));
@@ -185,7 +180,7 @@ export function PositioningEditor({ initial }: { initial: PositioningData }) {
       },
     }));
 
-  const save = async () => {
+  const handleSave = () => {
     const result = positioningSchema.safeParse(data);
     if (!result.success) {
       const errs: Record<string, string> = {};
@@ -194,35 +189,14 @@ export function PositioningEditor({ initial }: { initial: PositioningData }) {
         if (!errs[key]) errs[key] = issue.message;
       }
       setErrors(errs);
-      setStatus({ kind: "err", msg: "Fix validation errors above." });
       return;
     }
     setErrors({});
-    setStatus({ kind: "saving" });
-    try {
-      const res = await fetch("/api/studio/brand", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          slug: "positioning",
-          content: renderPositioning(result.data),
-        }),
-      });
-      if (!res.ok) {
-        const msg = await res.text();
-        setStatus({ kind: "err", msg });
-        return;
-      }
-      setStatus({ kind: "ok" });
-      startTransition(() => router.refresh());
-    } catch (err) {
-      setStatus({ kind: "err", msg: err instanceof Error ? err.message : String(err) });
-    }
+    save(result.data);
   };
 
   return (
     <div className="space-y-8">
-      {/* Category claim */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">
           Category claim
@@ -268,7 +242,6 @@ export function PositioningEditor({ initial }: { initial: PositioningData }) {
         <button type="button" onClick={addCompetitor} className={GHOST_BTN + " mt-2"}>+ Add competitor</button>
       </section>
 
-      {/* The moat */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">The moat</h2>
         <textarea
@@ -280,7 +253,6 @@ export function PositioningEditor({ initial }: { initial: PositioningData }) {
         {errors.moat && <p className={ERR_TEXT}>{errors.moat}</p>}
       </section>
 
-      {/* Trust equation */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">Trust equation</h2>
         <div className="mb-4">
@@ -311,7 +283,6 @@ export function PositioningEditor({ initial }: { initial: PositioningData }) {
         </div>
       </section>
 
-      {/* Value architecture */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">Value architecture</h2>
         <div className="overflow-x-auto rounded border border-neutral-200 bg-white">
@@ -340,7 +311,6 @@ export function PositioningEditor({ initial }: { initial: PositioningData }) {
         </div>
       </section>
 
-      {/* Comparison matrix */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">Structural comparison matrix</h2>
         <div className="overflow-x-auto rounded border border-neutral-200 bg-white">
@@ -376,8 +346,8 @@ export function PositioningEditor({ initial }: { initial: PositioningData }) {
                         onChange={(e) => setYesNo(ri, ci, e.target.value as "yes" | "no" | "na")}
                         className="rounded border border-transparent bg-transparent font-mono text-xs hover:border-neutral-200 focus:border-neutral-900"
                       >
-                        <option value="yes">✅</option>
-                        <option value="no">❌</option>
+                        <option value="yes">yes</option>
+                        <option value="no">no</option>
                         <option value="na">n/a</option>
                       </select>
                     </td>
@@ -393,18 +363,25 @@ export function PositioningEditor({ initial }: { initial: PositioningData }) {
         <button type="button" onClick={addMatrixRow} className={GHOST_BTN + " mt-2"}>+ Add row</button>
       </section>
 
-      <SaveBar status={status} pending={isPending} onSave={save} />
+      <SaveBar status={status} onSave={handleSave} />
+
+      {diffOpen && (
+        <DiffModal
+          current={currentContent}
+          next={newContent}
+          onConfirm={confirmSave}
+          onCancel={closeDiff}
+        />
+      )}
     </div>
   );
 }
 
 function SaveBar({
   status,
-  pending,
   onSave,
 }: {
   status: Status;
-  pending: boolean;
   onSave: () => void;
 }) {
   return (
@@ -412,7 +389,7 @@ function SaveBar({
       <button
         type="button"
         onClick={onSave}
-        disabled={status.kind === "saving" || pending}
+        disabled={status.kind === "saving"}
         className="rounded-full bg-neutral-900 px-5 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-50"
       >
         {status.kind === "saving" ? "Saving..." : "Save section"}

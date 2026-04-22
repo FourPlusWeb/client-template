@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useSectionSave, DiffModal, type SaveStatus } from "../_hooks/useSectionSave";
 import {
   ARCHETYPES,
   COMMON_PAGES,
@@ -13,15 +13,14 @@ import {
   type VariationId,
 } from "../../../../lib/brand-sections/architecture";
 
-type Status = { kind: "idle" } | { kind: "saving" } | { kind: "ok"; updatedConfig: boolean } | { kind: "err"; msg: string };
+type Status = SaveStatus;
 
 export function ArchitectureEditor({ initial }: { initial: ArchitectureData }) {
   const [data, setData] = useState<ArchitectureData>(initial);
   const [customPage, setCustomPage] = useState("");
   const [updateConfig, setUpdateConfig] = useState(false);
-  const [status, setStatus] = useState<Status>({ kind: "idle" });
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+    useSectionSave("architecture", renderArchitecture, renderArchitecture(initial));
 
   const setNav = (next: NavItem[]) => setData((d) => ({ ...d, nav: next }));
   const updateNavItem = (i: number, patch: Partial<NavItem>) => {
@@ -50,33 +49,8 @@ export function ArchitectureEditor({ initial }: { initial: ArchitectureData }) {
     setCustomPage("");
   };
 
-  const save = async () => {
-    setStatus({ kind: "saving" });
-    try {
-      const res = await fetch("/api/studio/brand", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          slug: "architecture",
-          content: renderArchitecture(data),
-          updateSiteConfig: updateConfig,
-        }),
-      });
-      if (!res.ok) {
-        const msg = await res.text();
-        setStatus({ kind: "err", msg });
-        return;
-      }
-      const json: { siteConfigUpdated?: boolean; siteConfigError?: string } = await res.json();
-      if (json.siteConfigError) {
-        setStatus({ kind: "err", msg: `BRAND.md saved but site.config.ts failed: ${json.siteConfigError}` });
-      } else {
-        setStatus({ kind: "ok", updatedConfig: Boolean(json.siteConfigUpdated) });
-      }
-      startTransition(() => router.refresh());
-    } catch (err) {
-      setStatus({ kind: "err", msg: err instanceof Error ? err.message : String(err) });
-    }
+  const handleSave = () => {
+    save(data);
   };
 
   return (
@@ -232,8 +206,8 @@ export function ArchitectureEditor({ initial }: { initial: ArchitectureData }) {
         </label>
         <button
           type="button"
-          onClick={save}
-          disabled={status.kind === "saving" || isPending}
+          onClick={handleSave}
+          disabled={status.kind === "saving"}
           className="rounded-full bg-neutral-900 px-5 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-50"
         >
           {status.kind === "saving" ? "Saving..." : "Save section"}
@@ -241,7 +215,7 @@ export function ArchitectureEditor({ initial }: { initial: ArchitectureData }) {
         {status.kind === "ok" && (
           <span className="font-mono text-[11px] uppercase tracking-wider text-emerald-700">
             Saved.{" "}
-            {status.updatedConfig
+            {updateConfig
               ? "BRAND.md + site.config.ts (backups: .bak)"
               : "BRAND.md.bak"}
           </span>
@@ -250,6 +224,15 @@ export function ArchitectureEditor({ initial }: { initial: ArchitectureData }) {
           <span className="font-mono text-[11px] uppercase tracking-wider text-red-700">{status.msg}</span>
         )}
       </div>
+
+      {diffOpen && (
+        <DiffModal
+          current={currentContent}
+          next={newContent}
+          onConfirm={() => confirmSave({ updateSiteConfig: updateConfig })}
+          onCancel={closeDiff}
+        />
+      )}
     </div>
   );
 }

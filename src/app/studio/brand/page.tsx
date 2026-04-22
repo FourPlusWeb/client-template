@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { readBrand, SECTIONS } from "../../../lib/brand-md";
+import { ClearBackupsButton } from "./_components/ClearBackupsButton";
 
 export const dynamic = "force-dynamic";
 
@@ -23,21 +24,24 @@ export default async function BrandIndex() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <header className="mb-10">
-        <p className="mb-2 font-mono text-[11px] uppercase tracking-wider text-neutral-500">
-          Brand Profile
-        </p>
-        <h1 className="mb-4 text-3xl font-semibold tracking-tight">
-          Edit this site&apos;s brand
-        </h1>
-        <p className="text-neutral-600">
-          Each section below maps to a block in <code>BRAND.md</code>. Saves
-          overwrite the file with a <code>.bak</code> alongside. This page is
-          dev-only and blocked in production by middleware.
-        </p>
-        <p className="mt-4 text-sm text-neutral-500">
-          {done} / {total} sections have content.
-        </p>
+      <header className="mb-10 flex items-start justify-between">
+        <div>
+          <p className="mb-2 font-mono text-[11px] uppercase tracking-wider text-neutral-500">
+            Brand Profile
+          </p>
+          <h1 className="mb-4 text-3xl font-semibold tracking-tight">
+            Edit this site&apos;s brand
+          </h1>
+          <p className="text-neutral-600">
+            Each section below maps to a block in <code>BRAND.md</code>. Saves
+            overwrite the file with a <code>.bak</code> alongside. This page is
+            dev-only and blocked in production by middleware.
+          </p>
+          <p className="mt-4 text-sm text-neutral-500">
+            {done} / {total} sections have content.
+          </p>
+        </div>
+        <ClearBackupsButton />
       </header>
 
       <ol className="divide-y divide-neutral-200 rounded border border-neutral-200 bg-white">

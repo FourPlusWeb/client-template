@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useSectionSave, DiffModal, type SaveStatus } from "../_hooks/useSectionSave";
 import {
   voiceSchema,
   renderVoice,
@@ -10,11 +10,7 @@ import {
   type ToneRow,
 } from "../../../../lib/brand-sections/voice";
 
-type Status =
-  | { kind: "idle" }
-  | { kind: "saving" }
-  | { kind: "ok" }
-  | { kind: "err"; msg: string };
+type Status = SaveStatus;
 
 const INPUT =
   "w-full rounded border border-neutral-300 bg-white px-3 py-2 font-mono text-sm text-neutral-900 focus:border-neutral-900 focus:outline-none";
@@ -32,9 +28,8 @@ const ERR_TEXT = "mt-1 text-xs text-red-700";
 export function VoiceEditor({ initial }: { initial: VoiceData }) {
   const [data, setData] = useState<VoiceData>(initial);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<Status>({ kind: "idle" });
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+    useSectionSave("voice", renderVoice, renderVoice(initial));
 
   const set = <K extends keyof VoiceData>(key: K, val: VoiceData[K]) =>
     setData((d) => ({ ...d, [key]: val }));
@@ -90,7 +85,7 @@ export function VoiceEditor({ initial }: { initial: VoiceData }) {
   const removeToneRow = (i: number) =>
     setData((d) => ({ ...d, toneMatrix: d.toneMatrix.filter((_, idx) => idx !== i) }));
 
-  const save = async () => {
+  const handleSave = () => {
     const result = voiceSchema.safeParse(data);
     if (!result.success) {
       const errs: Record<string, string> = {};
@@ -99,35 +94,14 @@ export function VoiceEditor({ initial }: { initial: VoiceData }) {
         if (!errs[key]) errs[key] = issue.message;
       }
       setErrors(errs);
-      setStatus({ kind: "err", msg: "Fix validation errors above." });
       return;
     }
     setErrors({});
-    setStatus({ kind: "saving" });
-    try {
-      const res = await fetch("/api/studio/brand", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          slug: "voice",
-          content: renderVoice(result.data),
-        }),
-      });
-      if (!res.ok) {
-        const msg = await res.text();
-        setStatus({ kind: "err", msg });
-        return;
-      }
-      setStatus({ kind: "ok" });
-      startTransition(() => router.refresh());
-    } catch (err) {
-      setStatus({ kind: "err", msg: err instanceof Error ? err.message : String(err) });
-    }
+    save(result.data);
   };
 
   return (
     <div className="space-y-8">
-      {/* Banned words */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">
           Banned words or phrases
@@ -143,7 +117,6 @@ export function VoiceEditor({ initial }: { initial: VoiceData }) {
         <ChipInput onAdd={addBannedWord} placeholder="Add banned word or phrase" />
       </section>
 
-      {/* Banned formatting */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">
           Banned punctuation or formatting
@@ -159,7 +132,6 @@ export function VoiceEditor({ initial }: { initial: VoiceData }) {
         <ChipInput onAdd={addBannedFormatting} placeholder="Add banned formatting rule" />
       </section>
 
-      {/* Signature rule */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">
           Signature rule
@@ -195,7 +167,6 @@ export function VoiceEditor({ initial }: { initial: VoiceData }) {
         </div>
       </section>
 
-      {/* Competitor rule */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">
           Competitor rule
@@ -210,7 +181,6 @@ export function VoiceEditor({ initial }: { initial: VoiceData }) {
         {errors.competitorRule && <p className={ERR_TEXT}>{errors.competitorRule}</p>}
       </section>
 
-      {/* Outcome vs. mechanism */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">
           Outcome vs. mechanism
@@ -225,7 +195,6 @@ export function VoiceEditor({ initial }: { initial: VoiceData }) {
         {errors.outcomeRule && <p className={ERR_TEXT}>{errors.outcomeRule}</p>}
       </section>
 
-      {/* Content hierarchy */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">
           Content hierarchy
@@ -261,7 +230,6 @@ export function VoiceEditor({ initial }: { initial: VoiceData }) {
         </p>
       </section>
 
-      {/* Personality */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">
           Personality (constant)
@@ -276,7 +244,6 @@ export function VoiceEditor({ initial }: { initial: VoiceData }) {
         {errors.personality && <p className={ERR_TEXT}>{errors.personality}</p>}
       </section>
 
-      {/* Tone matrix */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">
           Tone matrix
@@ -321,7 +288,6 @@ export function VoiceEditor({ initial }: { initial: VoiceData }) {
         <button type="button" onClick={addToneRow} className={GHOST_BTN + " mt-2"}>+ Add row</button>
       </section>
 
-      {/* Internal test */}
       <section>
         <h2 className="mb-3 font-mono text-[11px] uppercase tracking-wider text-neutral-600">
           Internal test
@@ -336,7 +302,16 @@ export function VoiceEditor({ initial }: { initial: VoiceData }) {
         {errors.internalTest && <p className={ERR_TEXT}>{errors.internalTest}</p>}
       </section>
 
-      <SaveBar status={status} pending={isPending} onSave={save} />
+      <SaveBar status={status} onSave={handleSave} />
+
+      {diffOpen && (
+        <DiffModal
+          current={currentContent}
+          next={newContent}
+          onConfirm={confirmSave}
+          onCancel={closeDiff}
+        />
+      )}
     </div>
   );
 }
@@ -371,11 +346,9 @@ function ChipInput({ onAdd, placeholder }: { onAdd: (v: string) => void; placeho
 
 function SaveBar({
   status,
-  pending,
   onSave,
 }: {
   status: Status;
-  pending: boolean;
   onSave: () => void;
 }) {
   return (
@@ -383,7 +356,7 @@ function SaveBar({
       <button
         type="button"
         onClick={onSave}
-        disabled={status.kind === "saving" || pending}
+        disabled={status.kind === "saving"}
         className="rounded-full bg-neutral-900 px-5 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-50"
       >
         {status.kind === "saving" ? "Saving..." : "Save section"}

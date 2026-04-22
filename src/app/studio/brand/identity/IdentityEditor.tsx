@@ -1,18 +1,14 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useSectionSave, DiffModal, type SaveStatus } from "../_hooks/useSectionSave";
 import {
   identitySchema,
   renderIdentity,
   type IdentityData,
 } from "../../../../lib/brand-sections/identity";
 
-type Status =
-  | { kind: "idle" }
-  | { kind: "saving" }
-  | { kind: "ok" }
-  | { kind: "err"; msg: string };
+type Status = SaveStatus;
 
 const SLUG = "identity";
 const LABEL = "block w-full text-xs font-medium uppercase tracking-wider text-neutral-700 mb-1";
@@ -24,15 +20,14 @@ const ERR_TEXT = "mt-1 text-xs text-red-700";
 export function IdentityEditor({ initial }: { initial: IdentityData }) {
   const [data, setData] = useState<IdentityData>(initial);
   const [errors, setErrors] = useState<Partial<Record<keyof IdentityData, string>>>({});
-  const [status, setStatus] = useState<Status>({ kind: "idle" });
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+    useSectionSave(SLUG, renderIdentity, renderIdentity(initial));
 
   const update = <K extends keyof IdentityData>(key: K, value: IdentityData[K]) => {
     setData((prev) => ({ ...prev, [key]: value }));
   };
 
-  const save = async () => {
+  const handleSave = () => {
     const result = identitySchema.safeParse(data);
     if (!result.success) {
       const fieldErrors: Partial<Record<keyof IdentityData, string>> = {};
@@ -41,30 +36,10 @@ export function IdentityEditor({ initial }: { initial: IdentityData }) {
         if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
       }
       setErrors(fieldErrors);
-      setStatus({ kind: "err", msg: "Fix validation errors above." });
       return;
     }
     setErrors({});
-    setStatus({ kind: "saving" });
-    try {
-      const res = await fetch("/api/studio/brand", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          slug: SLUG,
-          content: renderIdentity(result.data),
-        }),
-      });
-      if (!res.ok) {
-        const msg = await res.text();
-        setStatus({ kind: "err", msg });
-        return;
-      }
-      setStatus({ kind: "ok" });
-      startTransition(() => router.refresh());
-    } catch (err) {
-      setStatus({ kind: "err", msg: err instanceof Error ? err.message : String(err) });
-    }
+    save(result.data);
   };
 
   return (
@@ -145,8 +120,8 @@ export function IdentityEditor({ initial }: { initial: IdentityData }) {
       <div className="mt-6 flex items-center gap-3">
         <button
           type="button"
-          onClick={save}
-          disabled={status.kind === "saving" || isPending}
+          onClick={handleSave}
+          disabled={status.kind === "saving"}
           className="rounded-full bg-neutral-900 px-5 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-50"
         >
           {status.kind === "saving" ? "Saving..." : "Save section"}
@@ -162,6 +137,15 @@ export function IdentityEditor({ initial }: { initial: IdentityData }) {
           </span>
         )}
       </div>
+
+      {diffOpen && (
+        <DiffModal
+          current={currentContent}
+          next={newContent}
+          onConfirm={confirmSave}
+          onCancel={closeDiff}
+        />
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useSectionSave, DiffModal, type SaveStatus } from "../_hooks/useSectionSave";
 import {
   COLOR_KEYS,
   renderVisual,
@@ -9,7 +9,7 @@ import {
   type VisualData,
 } from "../../../../lib/brand-sections/visual";
 
-type Status = { kind: "idle" } | { kind: "saving" } | { kind: "ok"; updatedConfig: boolean } | { kind: "err"; msg: string };
+type Status = SaveStatus;
 
 function isValidHex(v: string): boolean {
   return /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(v);
@@ -18,41 +18,15 @@ function isValidHex(v: string): boolean {
 export function VisualEditor({ initial }: { initial: VisualData }) {
   const [data, setData] = useState<VisualData>(initial);
   const [updateConfig, setUpdateConfig] = useState(false);
-  const [status, setStatus] = useState<Status>({ kind: "idle" });
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const { save, status, diffOpen, currentContent, newContent, closeDiff, confirmSave } =
+    useSectionSave("visual", renderVisual, renderVisual(initial));
 
   const setColor = (key: keyof VisualColors, value: string) => {
     setData((d) => ({ ...d, colors: { ...d.colors, [key]: value } }));
   };
 
-  const save = async () => {
-    setStatus({ kind: "saving" });
-    try {
-      const res = await fetch("/api/studio/brand", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          slug: "visual",
-          content: renderVisual(data),
-          updateSiteConfig: updateConfig,
-        }),
-      });
-      if (!res.ok) {
-        const msg = await res.text();
-        setStatus({ kind: "err", msg });
-        return;
-      }
-      const json: { siteConfigUpdated?: boolean; siteConfigError?: string } = await res.json();
-      if (json.siteConfigError) {
-        setStatus({ kind: "err", msg: `BRAND.md saved but site.config.ts failed: ${json.siteConfigError}` });
-      } else {
-        setStatus({ kind: "ok", updatedConfig: Boolean(json.siteConfigUpdated) });
-      }
-      startTransition(() => router.refresh());
-    } catch (err) {
-      setStatus({ kind: "err", msg: err instanceof Error ? err.message : String(err) });
-    }
+  const handleSave = () => {
+    save(data);
   };
 
   return (
@@ -175,8 +149,8 @@ export function VisualEditor({ initial }: { initial: VisualData }) {
         </label>
         <button
           type="button"
-          onClick={save}
-          disabled={status.kind === "saving" || isPending}
+          onClick={handleSave}
+          disabled={status.kind === "saving"}
           className="rounded-full bg-neutral-900 px-5 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-50"
         >
           {status.kind === "saving" ? "Saving..." : "Save section"}
@@ -184,7 +158,7 @@ export function VisualEditor({ initial }: { initial: VisualData }) {
         {status.kind === "ok" && (
           <span className="font-mono text-[11px] uppercase tracking-wider text-emerald-700">
             Saved.{" "}
-            {status.updatedConfig
+            {updateConfig
               ? "BRAND.md + site.config.ts (backups: .bak)"
               : "BRAND.md.bak"}
           </span>
@@ -193,6 +167,15 @@ export function VisualEditor({ initial }: { initial: VisualData }) {
           <span className="font-mono text-[11px] uppercase tracking-wider text-red-700">{status.msg}</span>
         )}
       </div>
+
+      {diffOpen && (
+        <DiffModal
+          current={currentContent}
+          next={newContent}
+          onConfirm={() => confirmSave({ updateSiteConfig: updateConfig })}
+          onCancel={closeDiff}
+        />
+      )}
     </div>
   );
 }

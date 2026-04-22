@@ -38,6 +38,9 @@ export async function POST(request: Request) {
   const blocked = prodBlock();
   if (blocked) return blocked;
 
+  const url = new URL(request.url);
+  const dryRun = url.searchParams.get("dryRun") === "1";
+
   let body: { slug?: string; content?: string; updateSiteConfig?: boolean };
   try {
     body = await request.json();
@@ -55,6 +58,10 @@ export async function POST(request: Request) {
   const meta = sectionBySlug(body.slug);
   if (!meta) {
     return NextResponse.json({ error: `Unknown section slug: ${body.slug}` }, { status: 400 });
+  }
+
+  if (dryRun) {
+    return NextResponse.json({ wouldWrite: true, slug: meta.slug, content: body.content });
   }
 
   // Step 1: always write BRAND.md. If this fails, bail out before touching
