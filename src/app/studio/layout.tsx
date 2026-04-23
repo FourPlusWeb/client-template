@@ -10,7 +10,9 @@ export default function StudioLayout({
 }: {
   children: React.ReactNode;
 }) {
-  if (process.env.NODE_ENV === "production") notFound();
+  if (process.env.NODE_ENV === "production" && !process.env.STUDIO_PASSWORD) {
+    notFound();
+  }
   return (
     <div className="min-h-screen bg-neutral-50 text-neutral-900">{children}</div>
   );

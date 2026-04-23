@@ -56,4 +56,11 @@ export const siteConfig: SiteConfig = {
   //     tracesSampleRate: 0.1,
   //   },
   // },
+
+  // Uncomment and fill to enable hCaptcha bot challenge on the contact form.
+  // captcha: {
+  //   provider: "hcaptcha",
+  //   siteKey: "10000000-ffff-ffff-ffff-000000000001",
+  //   secret: process.env.HCAPTCHA_SECRET ?? "",
+  // },
 };

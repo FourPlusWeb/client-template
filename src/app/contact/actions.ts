@@ -3,50 +3,77 @@
 import { headers } from "next/headers";
 import { Resend } from "resend";
 import { z } from "zod";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 import type { ContactFormData } from "@fourplusweb/ui";
 import { siteConfig } from "../../../site.config";
 import { ContactFormNotification } from "../../emails/ContactFormNotification";
 
-// Re-declare the schema server-side. The @fourplusweb/ui ContactForm
-// already validates client-side, but any direct POST bypasses that.
-// Keep limits mirrored with the ui package.
 const ContactSchema = z.object({
   name: z.string().min(2).max(200),
   email: z.string().email().max(254),
   phone: z.string().max(30).optional().or(z.literal("")),
   message: z.string().min(10).max(5000),
   website: z.string().max(0).optional().or(z.literal("")),
+  captchaToken: z.string().optional(),
 });
 
 export type ContactFormResult =
   | { status: "success" }
   | { status: "error"; error: string };
 
-// Per-process, per-IP counter. Resets on cold start; fine for SMB volume
-// combined with honeypot + Zod revalidation. Upgrade to a shared store
-// (Upstash/Redis) if we ever scale beyond a single function instance.
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000;
-const RATE_LIMIT_MAX = 3;
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || entry.resetAt < now) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return true;
-  }
-  if (entry.count >= RATE_LIMIT_MAX) return false;
-  entry.count += 1;
-  return true;
-}
+const ratelimit = new Ratelimit({
+  redis: new Redis({
+    url: process.env.UPSTASH_REST_API_URL ?? "",
+    token: process.env.UPSTASH_REST_API_TOKEN ?? "",
+  }),
+  limiter: Ratelimit.fixedWindow(3, "5 m"),
+  analytics: false,
+  prefix: "contact-form",
+});
 
 function maskEmail(value: string): string {
   return value.replace(/(.{2}).*(@.*)/, "$1***$2");
 }
 
+async function verifyCaptcha(token: string): Promise<boolean> {
+  const config = siteConfig as {
+    captcha?: { provider: "hcaptcha" | "turnstile"; siteKey: string; secret: string };
+  };
+  const captcha = config.captcha;
+  if (!captcha?.secret || !captcha?.siteKey) {
+    console.warn("[contact] captcha misconfigured, skipping verification");
+    return true;
+  }
+
+  const endpoint =
+    captcha.provider === "hcaptcha"
+      ? "https://hcaptcha.com/siteverify"
+      : "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+
+  try {
+    const params = new URLSearchParams({
+      secret: captcha.secret,
+      response: token,
+    });
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params.toString(),
+    });
+
+    const data = await response.json();
+    return captcha.provider === "hcaptcha"
+      ? (data as { success: boolean }).success
+      : (data as { success: boolean }).success;
+  } catch {
+    return false;
+  }
+}
+
 export async function submitContact(
-  data: ContactFormData,
+  data: ContactFormData & { captchaToken?: string },
 ): Promise<ContactFormResult> {
   const parsed = ContactSchema.safeParse(data);
   if (!parsed.success) {
@@ -56,10 +83,28 @@ export async function submitContact(
     };
   }
 
-  // Honeypot: silent-success on non-empty website field. Bot doesn't
-  // learn the trap exists.
   if (parsed.data.website && parsed.data.website.length > 0) {
     return { status: "success" };
+  }
+
+  const siteConfigTyped = siteConfig as {
+    captcha?: { provider: "hcaptcha" | "turnstile"; siteKey: string; secret: string };
+  };
+  if (siteConfigTyped.captcha) {
+    const token = parsed.data.captchaToken;
+    if (!token) {
+      return {
+        status: "error",
+        error: "Captcha validation failed. Please try again.",
+      };
+    }
+    const valid = await verifyCaptcha(token);
+    if (!valid) {
+      return {
+        status: "error",
+        error: "Captcha validation failed. Please try again.",
+      };
+    }
   }
 
   const hdrs = await headers();
@@ -68,12 +113,15 @@ export async function submitContact(
     hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     "unknown";
 
-  if (!checkRateLimit(ip)) {
-    return {
-      status: "error",
-      error:
-        "Твърде много заявки. Моля, опитайте отново след няколко минути.",
-    };
+  if (process.env.UPSTASH_REST_API_URL && process.env.UPSTASH_REST_API_TOKEN) {
+    const { success } = await ratelimit.limit(ip);
+    if (!success) {
+      return {
+        status: "error",
+        error:
+          "Твърде много заявки. Моля, опитайте отново след няколко минути.",
+      };
+    }
   }
 
   const apiKey = process.env.RESEND_API_KEY;
@@ -126,8 +174,6 @@ export async function submitContact(
       };
     }
 
-    // Metadata-only log — never log the message body (GDPR: minimize
-    // logged personal data).
     console.log("[contact] sent", {
       from: maskEmail(parsed.data.email),
       ip: ip.slice(0, 8) + "…",

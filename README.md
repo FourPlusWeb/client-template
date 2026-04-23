@@ -31,6 +31,25 @@ FourPlus WebStudio Next.js 16 starter. Fork this via GitHub
 If `pnpm install` hits 401, run `pnpm verify:auth` — it isolates whether
 the problem is the token, the scope, or org membership.
 
+## Fork workflow for client sites
+
+To create a new client site from this template:
+
+1. On GitHub, navigate to this repository
+2. Click **"Use this template"** → **"Create a new repository"**
+3. Owner: select `FourPlusWeb` organization
+4. Repository name: `client-{client-name}` (e.g., `client-acme-plumbing`)
+5. **Check "Copy the `main` branch only"** (default) — do NOT include
+   all branches
+6. Create the repository
+7. In the new repo settings, enable **"Template repository"** checkbox
+   (so future forks can reuse the same setup)
+8. Clone locally and proceed with customization per the Customization
+   section above
+
+The `/studio/brand` route works out of the box when forked — Next.js
+statically defines all routes at build time.
+
 ## Customization
 
 - **Brand, navigation, contacts** — [`site.config.ts`](site.config.ts)
