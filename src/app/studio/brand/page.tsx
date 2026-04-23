@@ -4,6 +4,12 @@ import { ClearBackupsButton } from "./_components/ClearBackupsButton";
 
 export const dynamic = "force-dynamic";
 
+const STUDIO_ITEMS = [
+  { href: "/studio/brand", label: "Brand", desc: "Edit brand sections" },
+  { href: "/studio/config", label: "Config", desc: "Site settings, colors, fonts" },
+  { href: "/studio/seo", label: "SEO", desc: "Meta tags per page" },
+];
+
 export default async function BrandIndex() {
   let filled: Record<string, boolean> = {};
   try {
@@ -11,7 +17,6 @@ export default async function BrandIndex() {
     filled = Object.fromEntries(
       SECTIONS.map((s) => [
         s.slug,
-        // Treat a section as "filled" if it has any non-TODO body beyond the header.
         hasContent(parsed.sections[s.slug]),
       ]),
     );
@@ -27,22 +32,39 @@ export default async function BrandIndex() {
       <header className="mb-10 flex items-start justify-between">
         <div>
           <p className="mb-2 font-mono text-[11px] uppercase tracking-wider text-neutral-500">
-            Brand Profile
+            Studio
           </p>
           <h1 className="mb-4 text-3xl font-semibold tracking-tight">
-            Edit this site&apos;s brand
+            Edit this site
           </h1>
           <p className="text-neutral-600">
-            Each section below maps to a block in <code>BRAND.md</code>. Saves
-            overwrite the file with a <code>.bak</code> alongside. This page is
-            dev-only and blocked in production by middleware.
+            Full control over your site. Dev-only, blocked in production.
           </p>
           <p className="mt-4 text-sm text-neutral-500">
-            {done} / {total} sections have content.
+            {done} / {total} brand sections filled.
           </p>
         </div>
         <ClearBackupsButton />
       </header>
+
+      <section className="mb-10 rounded-lg border border-neutral-200 bg-white p-6">
+        <h2 className="mb-4 text-lg font-medium">Studio Tools</h2>
+        <div className="grid gap-3">
+          {STUDIO_ITEMS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="flex items-center justify-between rounded-md border border-neutral-200 px-4 py-3 transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+            >
+              <div>
+                <span className="font-medium text-neutral-900">{item.label}</span>
+                <span className="ml-2 text-neutral-500">— {item.desc}</span>
+              </div>
+              <span className="text-neutral-400">→</span>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       <ol className="divide-y divide-neutral-200 rounded border border-neutral-200 bg-white">
         {SECTIONS.map((s) => (
@@ -79,8 +101,6 @@ function hasContent(block: string): boolean {
   if (!block) return false;
   const withoutHeader = block.replace(/^##\s+\d+\.\s+.+\s*/m, "").trim();
   if (!withoutHeader) return false;
-  // Template placeholder: if every non-blank line is just "TODO" or a header,
-  // treat as empty.
   const lines = withoutHeader.split(/\r?\n/).filter((l) => l.trim());
   const nonBoilerplate = lines.filter(
     (l) => !/^TODO\b/i.test(l.trim()) && !/^[#*_\-|]+$/.test(l.trim()),
