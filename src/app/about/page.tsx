@@ -48,9 +48,9 @@ export default function AboutPage() {
           <div className="max-w-[var(--container-md)]">
             <SectionHeading
               as="h1"
-              overline="About the system"
-              title="Шаблон, създаден да се адаптира, не да ви ограничава."
-              description="Основната идея е проста: имате завършена рамка, която изглежда добре, работи добре и може да се превърне в различен сайт много по-бързо от еднократно ръчно проектиран старт от нулата."
+              overline="За нас"
+              title="Вашият текст тук"
+              description="Разкажете историята на вашия екип или компания. Добавете опит, мисия и ценности."
             />
           </div>
         </Container>
@@ -59,9 +59,9 @@ export default function AboutPage() {
       <FluidSection role="pillar" background="surface-alt">
         <Container>
           <SectionHeading
-            overline="Какво получавате"
-            title="Foundation, не завършен бранд"
-            description="Това е foundation layer за нови проекти. Всяка част е направена да остане полезна и след следващата промяна на темата."
+            overline="Принципи"
+            title="Какво предлагаме"
+            description="Това са вашите ключови силни страни. Променете според вашия бизнес."
           />
 
           <div className="mt-12">
@@ -89,9 +89,9 @@ export default function AboutPage() {
         <Container>
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
             <SectionHeading
-              overline="Capabilities"
-              title="Подходящо за различни типове клиентски сайтове"
-              description="Можете да го използвате за нова агенция, SaaS, услуга, личен бранд или малък екипен сайт. Едно и също ядро обслужва различни съдържателни посоки."
+              overline="Възможности"
+              title="Какво предлагаме"
+              description="Сменете този текст с вашите конкретни услуги или продукти."
             />
 
             <ul className="grid gap-4 sm:grid-cols-2">

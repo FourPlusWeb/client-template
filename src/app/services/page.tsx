@@ -76,9 +76,9 @@ export default function ServicesPage() {
           <div className="max-w-[var(--container-md)]">
             <SectionHeading
               as="h1"
-              overline="Services as modules"
-              title="Услугите са подредени като модули, не като твърд сценарий."
-              description="Това позволява лесно да добавите, махнете или преименувате блокове според конкретния клиент, без да се чупи цялата структура на страницата."
+              overline="Услуги"
+              title="Вашите услуги тук"
+              description="Опишете вашите услуги или продукти. Променете списъка по-долу според вашата оферта."
             />
           </div>
         </Container>
@@ -90,9 +90,9 @@ export default function ServicesPage() {
         <Container>
           <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
             <SectionHeading
-              overline="What is included"
-              title="Блоковете се пренареждат бързо."
-              description="Template-ът остава полезен, когато сайтът се развива от прост стартов проект към по-голям, по-уникален и по-специфичен продукт."
+              overline="Какво включваме"
+              title="Какво получавате"
+              description="Променете този списък с вашите конкретни включени услуги."
             />
 
             <ul className="flex flex-col gap-0">
@@ -113,9 +113,9 @@ export default function ServicesPage() {
       </FluidSection>
 
       <CTA
-        title="Искате нещо уникално, но не от нулата."
-        description="Точно за това служи този template: бърза адаптация, ясна основа и достатъчно свобода за различни брандове."
-        primary={{ label: "Свържете се с нас", href: "/contact" }}
+        title="Интересувате се?"
+        description="Свържете се с нас, за да обсъдим вашия проект."
+        primary={{ label: "Контакти", href: "/contact" }}
       />
     </>
   );

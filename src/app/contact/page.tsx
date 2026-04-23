@@ -27,12 +27,12 @@ export default function ContactPage() {
     <FluidSection role="hero">
       <Container>
         <div className="max-w-[var(--container-md)]">
-          <SectionHeading
-            as="h1"
-            overline="Contact flow"
-            title="Свържете се с нас, когато сте готови да превърнем идеята в структура."
-            description="Формата е кратка, за да е лесно да започнете. Оттам нататък адаптираме сайта според вашия бранд, съдържание и скорост на работа."
-          />
+<SectionHeading
+              as="h1"
+              overline="Контакти"
+              title=" Свържете се с нас"
+              description="Разкажете ни за вашия проект или запитване. Ще отговорим в най-кратък срок."
+            />
         </div>
 
         <div className="mt-12 grid gap-10 lg:grid-cols-[1.05fr_0.95fr]">

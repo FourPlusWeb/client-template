@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   Container,
   CTA,
@@ -9,6 +10,12 @@ import {
   Testimonials,
   type Testimonial,
 } from "@fourplusweb/ui";
+import { siteConfig } from "../../site.config";
+
+export const metadata: Metadata = {
+  title: "Начало",
+  description: siteConfig.description,
+};
 
 const pillars = [
   {
@@ -64,11 +71,11 @@ export default function Home() {
     <>
       <Hero
         layout="editorial"
-        eyebrow="Основа, управлявана от токени"
-        title="Красив шаблон, който е достатъчно готов и лесно се пренастройва."
-        subtitle="Това е базата, която искате да изглежда завършена още от първия ден, но да остава спокойна за промени. Цветовете, сенките и ритъмът идват от токените, така че следващият бранд е бърза конфигурация, а не ново оформление от нулата."
-        cta={{ label: "Започнете проекта", href: "/contact" }}
-        secondaryCta={{ label: "Вижте структурата", href: "/services" }}
+        eyebrow={siteConfig.name}
+        title="Започнете тук"
+        subtitle="Добавете вашия текст. Променете заглавието. Сменете изображението. Страницата е ваша."
+        cta={{ label: "Свържете се", href: "/contact" }}
+        secondaryCta={{ label: "Услуги", href: "/services" }}
       />
 
       <FluidSection role="detail">
@@ -160,10 +167,10 @@ export default function Home() {
       <Testimonials item={testimonial} />
 
       <CTA
-        title="Шаблонът е по-добър, когато не ви пречи да го смените бързо."
-        description="Точно затова текущата основа е token-first: сменяте палитра, typography и spacing през конфигурацията, а страниците запазват структурата си."
-        primary={{ label: "Да започнем", href: "/contact" }}
-        secondary={{ label: "Вижте услугите", href: "/services" }}
+        title="Готови ли сте?"
+        description="Свържете се с нас, за да обсъдим вашия проект."
+        primary={{ label: "Контакти", href: "/contact" }}
+        secondary={{ label: "Услуги", href: "/services" }}
       />
     </>
   );

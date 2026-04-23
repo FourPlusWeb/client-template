@@ -38,9 +38,9 @@ export default function BlogIndexPage() {
       <Container>
         <SectionHeading
           as="h1"
-          overline="Knowledge base"
+          overline="Блог"
           title="Блог"
-          description="Новини, идеи и статии, които лесно се адаптират към различен бранд и тон на комуникация."
+          description="Добавете ваши статии тук. Променете заглавието и описанието."
         />
 
         <div className="mt-12">
