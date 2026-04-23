@@ -10,7 +10,14 @@
  */
 
 import { readFile, writeFile, copyFile, access } from "node:fs/promises";
-import { join, resolve } from "node:path";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const TEMPLATE_ROOT = resolve(__dirname, "..");
 
 export type ColorsData = {
   primary: string;
@@ -87,12 +94,12 @@ function renderNavBlock(nav: NavItem[], indent = "  "): string {
 }
 
 function readSource(cwd: string): Promise<string> {
-  return readFile(join(cwd, SITE_CONFIG), "utf8");
+  return readFile(join(/*turbopackIgnore: true*/ cwd, SITE_CONFIG), "utf8");
 }
 
 async function backupAndWrite(cwd: string, next: string): Promise<void> {
-  const path = join(cwd, SITE_CONFIG);
-  const bak = join(cwd, SITE_CONFIG_BAK);
+  const path = join(/*turbopackIgnore: true*/ cwd, SITE_CONFIG);
+  const bak = join(/*turbopackIgnore: true*/ cwd, SITE_CONFIG_BAK);
   try {
     await access(path);
     await copyFile(path, bak);
@@ -105,7 +112,7 @@ async function backupAndWrite(cwd: string, next: string): Promise<void> {
 export async function writeColorsAndFonts(
   colors: ColorsData,
   fonts: FontsData,
-  cwd: string = process.cwd(),
+  cwd: string = TEMPLATE_ROOT,
 ): Promise<void> {
   const src = await readSource(cwd);
 
@@ -129,7 +136,7 @@ export async function writeColorsAndFonts(
 export async function writeNavAndVariation(
   nav: NavItem[],
   variation: string | undefined,
-  cwd: string = process.cwd(),
+  cwd: string = TEMPLATE_ROOT,
 ): Promise<void> {
   const src = await readSource(cwd);
 
@@ -162,7 +169,7 @@ export type ParsedSiteConfig = {
   variation?: string;
 };
 
-export async function parseSiteConfig(cwd: string = process.cwd()): Promise<ParsedSiteConfig> {
+export async function parseSiteConfig(cwd: string = TEMPLATE_ROOT): Promise<ParsedSiteConfig> {
   const src = await readSource(cwd);
   const out: ParsedSiteConfig = {};
 
@@ -206,5 +213,5 @@ export async function parseSiteConfig(cwd: string = process.cwd()): Promise<Pars
 }
 
 export function resolveSiteConfigCwd(): string {
-  return resolve(process.cwd());
+  return TEMPLATE_ROOT;
 }

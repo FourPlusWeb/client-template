@@ -17,6 +17,13 @@
 
 import { readFile, writeFile, copyFile, access } from "node:fs/promises";
 import { join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const TEMPLATE_ROOT = resolve(/*turbopackIgnore: true*/ __dirname, "..");
 
 export type SectionSlug =
   | "identity"
@@ -111,18 +118,18 @@ export function renderBrandMd(parsed: ParsedBrand): string {
 const BRAND_MD = "BRAND.md";
 const BRAND_BAK = "BRAND.md.bak";
 
-export async function readBrand(cwd: string = process.cwd()): Promise<ParsedBrand> {
-  const src = await readFile(join(cwd, BRAND_MD), "utf8");
+export async function readBrand(cwd: string = TEMPLATE_ROOT): Promise<ParsedBrand> {
+  const src = await readFile(join(/*turbopackIgnore: true*/ cwd, BRAND_MD), "utf8");
   return parseBrandMd(src);
 }
 
 export async function writeBrandSection(
   slug: SectionSlug,
   nextContent: string,
-  cwd: string = process.cwd(),
+  cwd: string = TEMPLATE_ROOT,
 ): Promise<void> {
-  const path = join(cwd, BRAND_MD);
-  const bak = join(cwd, BRAND_BAK);
+  const path = join(/*turbopackIgnore: true*/ cwd, BRAND_MD);
+  const bak = join(/*turbopackIgnore: true*/ cwd, BRAND_BAK);
 
   let parsed: ParsedBrand;
   try {
@@ -140,11 +147,11 @@ export async function writeBrandSection(
   await writeFile(path, renderBrandMd(parsed), "utf8");
 }
 
-export async function clearBackups(cwd: string = process.cwd()): Promise<string[]> {
+export async function clearBackups(cwd: string = TEMPLATE_ROOT): Promise<string[]> {
   const { rm } = await import("node:fs/promises");
   const cleaned: string[] = [];
   for (const name of [BRAND_BAK, "BRIEF.md.bak", "site.config.ts.bak"]) {
-    const p = join(cwd, name);
+    const p = join(/*turbopackIgnore: true*/ cwd, name);
     try {
       await access(p);
       await rm(p);
@@ -157,7 +164,5 @@ export async function clearBackups(cwd: string = process.cwd()): Promise<string[
 }
 
 export function resolveTargetCwd(): string {
-  // Studio routes run in the client site's own Next.js dev server.
-  // cwd === the client site directory (the one that has BRAND.md next to package.json).
-  return resolve(process.cwd());
+  return TEMPLATE_ROOT;
 }

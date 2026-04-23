@@ -18,7 +18,7 @@ export type Post = PostFrontmatter & {
   content: string;
 };
 
-const BLOG_DIR = join(process.cwd(), "content", "blog");
+const BLOG_DIR = join(/*turbopackIgnore: true*/ process.cwd(), "content", "blog");
 
 function readPost(filename: string): Post {
   const slug = filename.replace(/\.mdx?$/, "");
