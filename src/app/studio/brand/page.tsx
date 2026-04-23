@@ -8,6 +8,10 @@ const STUDIO_ITEMS = [
   { href: "/studio/brand", label: "Brand", desc: "Edit brand sections" },
   { href: "/studio/config", label: "Config", desc: "Site settings, colors, fonts" },
   { href: "/studio/seo", label: "SEO", desc: "Meta tags per page" },
+  { href: "/studio/submissions", label: "Submissions", desc: "View form entries" },
+  { href: "/studio/preview", label: "Preview", desc: "Share preview links" },
+  { href: "/studio/media", label: "Media", desc: "Manage images" },
+  { href: "/studio/custom", label: "Custom", desc: "Page-specific code" },
 ];
 
 export default async function BrandIndex() {
